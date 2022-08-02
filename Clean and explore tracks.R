@@ -90,3 +90,38 @@ plotly::ggplotly(
 dat2 %>%
   rename(id = Ptt, date = Date, x = Longitude, y = Latitude) %>%
   bayesmove::shiny_tracks(epsg = 4326)
+
+
+
+### Remove locations likely before tag deployment ###
+
+# Filter by study extent
+dat3<- dat2 %>%
+  filter(Latitude < 0 & Longitude > -42 & Longitude < -30)
+
+ggplot() +
+  geom_path(data = dat3, aes(Longitude, Latitude, group = Ptt, color = Ptt), size = 0.25) +
+  scale_color_viridis_d() +
+  theme_bw()
+# looks better
+
+# Inspect time series plots of lat and long
+ggplot() +
+  geom_line(data = dat3, aes(Date, Longitude, color = Ptt)) +
+  scale_color_viridis_d() +
+  theme_bw() +
+  facet_wrap(~Ptt, scales = "free_y")
+
+ggplot() +
+  geom_line(data = dat3, aes(Date, Latitude, color = Ptt)) +
+  scale_color_viridis_d() +
+  theme_bw() +
+  facet_wrap(~Ptt, scales = "free_y")
+# nothing else needs to be dealt with at this point
+
+
+
+
+### Export cleaned data ###
+
+write.csv(dat3, "Data/Cleaned_FDN Cmydas tracks.csv", row.names = FALSE)
