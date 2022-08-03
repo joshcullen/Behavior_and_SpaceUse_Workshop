@@ -1,7 +1,7 @@
 
-#############################################
-### Fit continuous-time state-space model ###
-#############################################
+#################################################################################
+### Fit continuous-time state-space model while accounting for location error ###
+#################################################################################
 
 library(tidyverse)
 library(lubridate)
@@ -15,7 +15,7 @@ library(future)  #needed to properly run foieGras::osar() in parallel
 
 ### Load data ###
 
-dat <- read.csv('Data/Cleaned_FDN Cmydas tracks.csv')
+dat <- read.csv('Processed_data/Cleaned_FDN Cmydas tracks.csv')
 
 glimpse(dat)
 summary(dat)
@@ -329,13 +329,41 @@ plotly::ggplotly(
 
 
 
-### Compare behavioral state estimates across the different approaches ###
+### Compare estimates across the different approaches ###
 
+# Behavioral states
 ggplot() +
-  geom_line(data = res_crw_fitted, aes(date, g, color = "Irregular")) +
+  geom_line(data = res_crw_fitted, aes(date, g, color = "CRW_Irregular")) +
   geom_line(data = res_crw_6hr, aes(date, g, color = "CRW_6hr")) +
   geom_line(data = res_mp_6hr, aes(date, g, color = "MP_6hr")) +
   scale_color_manual(values = RColorBrewer::brewer.pal(3, "Dark2")) +
   theme_bw() +
   facet_wrap(~id, scales = "free_x")
+
+## Of these 3 different models, the CRW model w/ 6 hr prediction time step seems to give best broad scale state estimates
+
+
+# Track relocations
+ggplot() +
+  geom_path(data = res_crw_fitted, aes(x, y, color = "CRW_Irregular")) +
+  geom_path(data = res_crw_6hr, aes(x, y, color = "CRW_6hr")) +
+  geom_path(data = res_mp_6hr, aes(x, y, color = "MP_6hr")) +
+  scale_color_manual(values = RColorBrewer::brewer.pal(3, "Dark2")) +
+  theme_bw() +
+  facet_wrap(~id, scales = "free")
+
+## Of these 3 approaches, the move persistence model seems to provide the best estimates when the individual appears to be stationary  (i.e., fewer unnecessary looping movements)
+
+
+### Overall verdict: for relatively fine-scale movements (time step > 1 hr & < 1 d), the CRW model seems to provide the best behavioral state estimates. Whlie all 3 models provided very similar estimates for the 'true' animal movements, the MP model seems to provide the best estimates, particularly when the animal appears to be encamped within a given site
+
+
+### Since the other behavioral state models do not account for location error and the analysis of step lengths and turning angles (if used) must be at a regular time interval, we will export the tracks from the move persistence model for further use.
+
+
+
+
+### Export fitted tracks ###
+
+write.csv(res_mp_6hr, "Processed_data/SSM_mp6hr_FDN Cmydas tracks.csv", row.names = FALSE)
 

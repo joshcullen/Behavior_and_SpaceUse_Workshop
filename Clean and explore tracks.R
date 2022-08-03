@@ -13,7 +13,7 @@ library(sf)
 
 ### Load data ###
 
-dat <- read.csv("Data/FDN Cmydas tracks.csv")
+dat <- read.csv("Raw_data/FDN Cmydas tracks.csv")
 
 # Explore data summaries
 glimpse(dat)
@@ -124,4 +124,4 @@ ggplot() +
 
 ### Export cleaned data ###
 
-write.csv(dat3, "Data/Cleaned_FDN Cmydas tracks.csv", row.names = FALSE)
+write.csv(dat3, "Processed_data/Cleaned_FDN Cmydas tracks.csv", row.names = FALSE)
