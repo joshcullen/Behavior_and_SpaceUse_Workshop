@@ -1,0 +1,7 @@
+---
+title: "How to prepare for this workshop"
+---
+
+Include a set of instructions for which software are required for this workshop. Primarily focused on the set of R packages that need to be installed, as well as a compiler tool for a specific OS (including R and optionally RStudio). This means pointing attendees to the websites they need to go to for downloading specialty software, such as Xcode, gfortran, etc.
+
+Provide explicit instructions that attendees should attempt to install all software at least 2 days before the workshop. That way I can help if they run into issues and can't install or run some of the necessary R packages.

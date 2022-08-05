@@ -1,0 +1,64 @@
+project:
+  type: website
+
+website:
+  title: "Space-Use and Behavioral State Estimation Workshop"
+  site-url: "https://joshcullen.github.io/workshop_website/"
+  repo-url: "https://github.com/joshcullen/Behavior_and_SpaceUse_Workshop"
+
+  opengraph: true
+  twitter-card:
+    creator: "@josh_a_cullen"
+    image: "images/twitter-card.png"
+
+  sidebar:
+    background: "#D9E3E4"
+    # logo: "images/logo.png"
+    pinned: true
+    align: center
+    tools:
+      - icon: twitter
+        href: "https://twitter.com/josh_a_cullen"
+        text: "Twitter"
+      - icon: github
+        href: "https://github.com/joshcullen/Behavior_and_SpaceUse_Workshop"
+        text: "GitHub Repo"
+
+    style: "docked"
+    search: true
+    collapse-level: 1
+    contents:
+      - section: "Workshop information"
+        contents:
+          - href: index.qmd
+            text: Overview
+          - href: workshop-schedule.qmd
+            text: Schedule
+          - href: workshop-materials.qmd
+            text: Materials
+          - href: workshop-resources.qmd
+            text: Useful Resources
+          - href: workshop-prep.qmd
+            text: Preparing for Workshop
+      - section: "Computing"
+        contents:
+          - href: computing-troubleshooting.qmd
+            text: Troubleshooting
+
+
+format:
+  html:
+    theme:
+      light: litera
+      dark: darkly
+    mainfont: "Atkinson Hyperlegible"
+    code-copy: true
+    code-overflow: wrap
+    toc: true
+
+freeze: auto
+
+editor: visual
+
+
+

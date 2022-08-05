@@ -1,0 +1,9 @@
+---
+title: "Resources related to covered topics"
+---
+
+* One section on published papers (or pre-prints) that present these different methods for animal movement analyses (i.e., further readings)
+
+* Another section on online resources for using each of the different R packages presented (i.e., package websites, vignettes)
+
+* Any other relevant miscellaneous resources

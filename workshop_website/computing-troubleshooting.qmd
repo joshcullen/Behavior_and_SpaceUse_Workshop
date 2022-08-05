@@ -1,0 +1,5 @@
+---
+title: "Troubleshooting computer problems"
+---
+
+Point attendees towards relevant websites, primarily related to issues w/ compiler errors or TMB install.

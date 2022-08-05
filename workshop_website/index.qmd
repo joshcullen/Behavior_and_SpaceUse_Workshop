@@ -1,0 +1,15 @@
+---
+title: "Space-use and behavioral state estimation from animal telemetry data"
+---
+
+The collection, analysis, and inferences made from animals tracked via satellite and acoustic telemetry have become common within the field of animal movement ecology and conservation. With these datasets, researchers and conservation practitioners are often interested in what the tagged animals are doing and where they’re doing it. There are an ever-growing number of tools that can make it difficult to determine which method to use for a particular project goal or dataset. This 2-day workshop will present a set of established methods commonly used to account for location error, estimate unobserved animal behavioral states and space-use, as well as some cutting-edge methods that have recently been developed.
+
+::: {layout-ncol=1}
+![](images/Promo behavior plot.png)
+![](images/Promo kde plot.png)
+:::
+
+
+Additionally, a set of guidelines will be presented as to how practitioners should decide which method is best for their project and data needs. The focus of this workshop will be on satellite telemetry data (i.e., GPS, Argos, light-level geolocation) for aquatic species using the R programming language, but is applicable to terrestrial species and some instances of acoustic telemetry.
+
+This workshop assumes that participants have an intermediate knowledge of the R programming language and are generally familiar with animal telemetry data.
