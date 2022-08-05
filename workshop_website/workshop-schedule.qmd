@@ -6,7 +6,7 @@ tbl-colwidths: [2,3,5]
 This page contains a tentative itinerary for the 2-day workshop. Note that this schedule may be subject to change depending on how quickly we move through the material.
 
 | Date            | Time                | Topic                                                                   |
-|---------------|---------------|-------------------------------------------|
+|-----------------|---------------------|-------------------------------------------------------------------------|
 | Thurs., Sept. 8 | 9:00 - 9:30 am      | Intro to animal movement ecology and behavioral state estimation        |
 |                 | 9:30 - 10:15 am     | Exploratory data analysis                                               |
 |                 | 10:15 - 10:30 am    | Coffee break                                                            |
