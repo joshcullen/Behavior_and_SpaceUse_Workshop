@@ -3,25 +3,35 @@ title: "Schedule"
 tbl-colwidths: [2,3,5]
 ---
 
-This page contains a tentative itinerary for the 2-day workshop. Note that this schedule may be subject to change depending on how quickly we move through the material.
+This page contains a tentative itinerary for the 2-day workshop. Note that this schedule may be subject to change depending on how quickly we move through the material. *All times in this schedule are reported in Eastern Time, so please account for the time difference if you belong to a different time zone.*
 
-| Date            | Time                | Topic                                                                   |
-|-----------------|---------------------|-------------------------------------------------------------------------|
-| Thurs., Sept. 8 | 9:00 - 9:30 am      | Intro to animal movement ecology and behavioral state estimation        |
-|                 | 9:30 - 10:15 am     | Exploratory data analysis                                               |
-|                 | 10:15 - 10:30 am    | Coffee break                                                            |
-|                 | 10:30 - 11:00 am    | Lecture on state-space models                                           |
-|                 | 11:00 am - 12:00 pm | Analyze tracks w/ state-space models via `foieGras`                     |
-|                 | 12:00 - 1:30 pm     | Lunch                                                                   |
-|                 | 1:30 - 2:00 pm      | Lecture on hidden Markov models                                         |
-|                 | 2:00 - 3:00 pm      | Analyze tracks w/ hidden Markov models via `momentuHMM`                 |
-|                 | 3:00 - 3:15 pm      | Coffee break                                                            |
-|                 | 3:15 - 3:45 pm      | Lecture on non-parametric Bayesian segmentation and clustering models   |
-|                 | 3:45 - 4:45 pm      | Analyze tracks w/ segment- and observation-level models via `bayesmove` |
-|                 | 4:45 - 5:00 pm      | Recap and guidelines for method selection                               |
-|                 |                     |                                                                         |
-| Fri., Sept. 9   | 9:00 - 9:30 am      | Intro to animal spatial ecology and space-use metrics                   |
-|                 |                     |                                                                         |
+| Date                | Time                | Topic                                                                   |
+|---------------|---------------|-------------------------------------------|
+| **Thurs., Sept. 8** | 9:00 - 9:30 am      | Intro to animal movement ecology and behavioral state estimation        |
+|                     | 9:30 - 10:15 am     | Exploratory data analysis                                               |
+|                     | 10:15 - 10:30 am    | **Coffee break**                                                        |
+|                     | 10:30 - 11:00 am    | Lecture on state-space models (SSMs)                                    |
+|                     | 11:00 am - 12:00 pm | Analyze tracks w/ SSMs via `foieGras`                                   |
+|                     | 12:00 - 1:30 pm     | **Lunch**                                                               |
+|                     | 1:30 - 2:00 pm      | Lecture on hidden Markov models (HMMs)                                  |
+|                     | 2:00 - 3:00 pm      | Analyze tracks w/ HMMs via `momentuHMM`                                 |
+|                     | 3:00 - 3:15 pm      | **Coffee break**                                                        |
+|                     | 3:15 - 3:45 pm      | Lecture on non-parametric Bayesian segmentation and clustering models   |
+|                     | 3:45 - 4:45 pm      | Analyze tracks w/ segment- and observation-level models via `bayesmove` |
+|                     | 4:45 - 5:00 pm      | Recap and guidelines for method selection                               |
+|                     |                     |                                                                         |
+| **Fri., Sept. 9**   | 9:00 - 9:30 am      | Intro to animal spatial ecology and space-use metrics                   |
+|                     | 9:30 - 10:00 am     | Estimate space-use by minimum convex polygon (MCP) via `amt`            |
+|                     | 10:00 - 10:15 am    | **Coffee break**                                                        |
+|                     | 10:15 - 10:45 am    | Lecture on kernel density estimation (KDE)                              |
+|                     | 10:45 am - 12:00 pm | Estimate space-use by KDE via `amt`                                     |
+|                     | 12:00 - 1:30 pm     | **Lunch**                                                               |
+|                     | 1:30 - 2:00 pm      | Lecture on autocorrelated KDE (AKDE)                                    |
+|                     | 2:00 - 3:00 pm      | Estimate space-use by AKDE via `ctmm`                                   |
+|                     | 3:00 - 3:15 pm      | **Coffee break**                                                        |
+|                     | 3:15 - 3:45 pm      | Lecture on dynamic Brownian bridge movement model (dBBMM)               |
+|                     | 3:45 - 4:45 pm      | Estimate space-use by dBBMM via `move`                                  |
+|                     | 4:45 - 5:00 pm      | Recap and guidelines for method selection                               |
 
 ```{r echo = FALSE}
 knitr::knit_exit()
