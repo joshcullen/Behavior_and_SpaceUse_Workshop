@@ -8,17 +8,15 @@
 # * Options for BRW and CRW models, including activity centers that have attractive or repulsive forces
 # * Option to perform multiple imputation via wrapper function for {crawl} methods, which can provide options to analyze tracks w/ measurement error and/or irregular time series indirectly
 # * Can include random effects by ID on TPM
-# * Can accomodate data streams/behaviors at multiple time scales (hierarchical HMM)
+# * Can accommodate data streams/behaviors at multiple time scales (hierarchical HMM)
 
 library(tidyverse)
 library(lubridate)
 library(momentuHMM)  #v1.5.4
 library(sf)  #v1.0.7
-library(rnaturalearth)
 library(tictoc)
 library(plotly)
 library(rerddapXtracto)
-library(cmocean)
 
 
 ### Load data ###
