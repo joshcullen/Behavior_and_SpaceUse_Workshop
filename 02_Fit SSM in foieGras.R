@@ -122,7 +122,7 @@ map(fit_crw_fitted, what = "fitted", aes = aes_lst(mp_pal = hcl.colors(n=100, "v
 tic()
 fit_crw_jmpm_fitted <- fit_mpm(fit_crw_fitted, what = "fitted", model = "jmpm",
                               control = mpm_control(verbose = 1))
-toc()  #took 4.5 min to fit
+toc()  #took 5 min to fit
 
 print(fit_crw_jmpm_fitted)
 plot(fit_crw_jmpm_fitted)
@@ -302,14 +302,16 @@ plot(fit_mp_6hr, what = "predicted", type = 3, ask = TRUE)
 
 
 # Grab results and plot
-res_mp_6hr<- grab(fit_mp_6hr, what = "predicted")
+res_mp_6hr_pred<- grab(fit_mp_6hr, what = "predicted")
+res_mp_6hr_irreg<- grab(fit_mp_6hr, what = "fitted")
 
 
 # Viz modeled tracks together
 plotly::ggplotly(
   ggplot() +
     geom_sf(data = brazil, fill = "grey60") +
-    geom_path(data = res_mp_6hr, aes(lon, lat, group = id, color = id), size = 0.75, alpha = 0.8) +
+    geom_path(data = res_mp_6hr_pred, aes(lon, lat, group = id, color = id), size = 0.75,
+              alpha = 0.8) +
     scale_color_viridis_d() +
     theme_bw() +
     theme(panel.grid = element_blank()) +
@@ -320,7 +322,8 @@ plotly::ggplotly(
 plotly::ggplotly(
   ggplot() +
     geom_sf(data = brazil, fill = "grey60") +
-    geom_point(data = res_mp_6hr, aes(lon, lat, group = id, color = g), size = 0.75, alpha = 0.8) +
+    geom_point(data = res_mp_6hr_pred, aes(lon, lat, group = id, color = g), size = 0.75,
+               alpha = 0.8) +
     scale_color_viridis_c(option = "inferno") +
     theme_bw() +
     theme(panel.grid = element_blank()) +
@@ -335,7 +338,7 @@ plotly::ggplotly(
 ggplot() +
   geom_line(data = res_crw_fitted, aes(date, g, color = "CRW_Irregular")) +
   geom_line(data = res_crw_6hr, aes(date, g, color = "CRW_6hr")) +
-  geom_line(data = res_mp_6hr, aes(date, g, color = "MP_6hr")) +
+  geom_line(data = res_mp_6hr_pred, aes(date, g, color = "MP_6hr")) +
   scale_color_manual(values = RColorBrewer::brewer.pal(3, "Dark2")) +
   theme_bw() +
   facet_wrap(~id, scales = "free_x")
@@ -347,7 +350,7 @@ ggplot() +
 ggplot() +
   geom_path(data = res_crw_fitted, aes(x, y, color = "CRW_Irregular")) +
   geom_path(data = res_crw_6hr, aes(x, y, color = "CRW_6hr")) +
-  geom_path(data = res_mp_6hr, aes(x, y, color = "MP_6hr")) +
+  geom_path(data = res_mp_6hr_pred, aes(x, y, color = "MP_6hr")) +
   scale_color_manual(values = RColorBrewer::brewer.pal(3, "Dark2")) +
   theme_bw() +
   facet_wrap(~id, scales = "free")
@@ -365,5 +368,7 @@ ggplot() +
 
 ### Export fitted tracks ###
 
-write.csv(res_mp_6hr, "Processed_data/SSM_mp6hr_FDN Cmydas tracks.csv", row.names = FALSE)
+write.csv(res_mp_6hr_pred, "Processed_data/SSM_mp6hr_FDN Cmydas tracks.csv", row.names = FALSE)
+write.csv(res_mp_6hr_irreg, "Processed_data/SSM_mp_FDN_irreg Cmydas tracks.csv", row.names = FALSE)
 
+save(fit_crw_6hr, fit_crw_mpm_6hr, file = "Processed_data/SSM_model_fits.RData")
