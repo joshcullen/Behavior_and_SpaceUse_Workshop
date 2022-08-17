@@ -1,1 +1,1 @@
-Sitemap: https://joshcullen.github.io/Behavior_and_SpaceUse_Workshop/sitemap.xml
+Sitemap: https://joshcullen.github.io/workshop_website/sitemap.xml

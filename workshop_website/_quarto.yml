@@ -11,11 +11,18 @@ website:
     creator: "@josh_a_cullen"
     image: "images/twitter-card.png"
 
+  page-footer:
+    right: |
+      This page is built with [Quarto](https://quarto.org/)
+    left: |
+      &copy; 2022, Josh Cullen. License: [MIT](https://github.com/joshcullen/Behavior_and_SpaceUse_Workshop/blob/main/LICENSE)
+    background: "light"
+
   sidebar:
     background: "#D9E3E4"
     # logo: "images/logo.png"
     pinned: true
-    align: center
+    align: left
     tools:
       - icon: twitter
         href: "https://twitter.com/josh_a_cullen"

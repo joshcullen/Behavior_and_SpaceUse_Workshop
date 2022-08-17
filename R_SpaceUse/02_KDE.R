@@ -207,8 +207,8 @@ dat.id.kde.hpi$method <- 'hpi'
 dat.id.kde <- rbind(dat.id.kde.href, dat.id.kde.hpi)
 
 ggplot(dat.id.kde, aes(factor(level), area, color = method)) +
-  geom_boxplot(width = 0.2, outlier.shape = NA, position = position_dodge(0.25)) +
-  geom_point(alpha = 0.7, position = position_jitterdodge(jitter.width = 0.05, dodge.width = 0.25)) +
+  geom_boxplot(width = 0.5, outlier.shape = NA, position = position_dodge(0.55)) +
+  geom_point(alpha = 0.7, position = position_jitterdodge(jitter.width = 0.25, dodge.width = 0.55)) +
   scale_color_met_d("Hokusai3") +
   theme_bw()
 
