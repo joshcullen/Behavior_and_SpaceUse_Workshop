@@ -25,7 +25,21 @@
     "href": "index.html",
     "title": "Space-use and behavioral state estimation from animal telemetry data",
     "section": "",
-    "text": "Additionally, a set of guidelines will be presented as to how practitioners should decide which method is best for their project and data needs. The focus of this workshop will be on satellite telemetry data (i.e., GPS, Argos, light-level geolocation) for aquatic species using the R programming language, but is applicable to terrestrial species and some instances of acoustic telemetry.\nThis workshop assumes that participants have an intermediate knowledge of the R programming language and are generally familiar with animal telemetry data. If you have any questions, please contact me at joshcullen10 [at] gmail.com.  \nThis material is based upon work supported by the National Science Foundation under Grant Numbers 2126583 and 1904818. Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation."
+    "text": "A NSF-funded workshop by Josh Cullen\n\n📆  September 8 - 9, 2022\n⏰  9:00 am - 5:00 pm\n🏫  Florida State University, EOAS 3063"
+  },
+  {
+    "objectID": "index.html#learning-objectives",
+    "href": "index.html#learning-objectives",
+    "title": "Space-use and behavioral state estimation from animal telemetry data",
+    "section": "Learning objectives",
+    "text": "Learning objectives\n\nGain experience in exploring many aspects of collected satellite telemetry data\nLearn how to account for location error using state-space models\nLearn how to implement advanced statistical models to estimate behavioral states\nLearn how to implement a variety of methods to estimate space-use\nUnderstand how to decide among different methods to estimate behavioral states and/or space-use depending on the study objectives and available data\nGain experience in generating plots to visualize model results and disseminate findings"
+  },
+  {
+    "objectID": "index.html#who-is-this-workshop-aimed-at",
+    "href": "index.html#who-is-this-workshop-aimed-at",
+    "title": "Space-use and behavioral state estimation from animal telemetry data",
+    "section": "Who is this workshop aimed at?",
+    "text": "Who is this workshop aimed at?\n\nAdvanced undergraduate students, graduate students, postdocs, and any other professionals that would like to learn more about the available options for study animal movement ecology\nIntermediate to advanced R users\nPractitioners familiar with animal telemetry data\nBeginner to intermediate GIS users"
   },
   {
     "objectID": "workshop-prep.html",

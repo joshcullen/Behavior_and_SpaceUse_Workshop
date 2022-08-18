@@ -57,7 +57,7 @@ ul.task-list{list-style: none;}
 
 
 <meta name="twitter:title" content="Space-Use and Behavioral State Estimation Workshop - Space-use and behavioral state estimation from animal telemetry data">
-<meta name="twitter:description" content="The collection, analysis, and inferences made from animals tracked via satellite and acoustic telemetry have become common within the field of animal movement ecology and conservation.">
+<meta name="twitter:description" content="A NSF-funded workshop by Josh Cullen">
 <meta name="twitter:image" content="https://joshcullen.github.io/Behavior_and_SpaceUse_Workshop/images/twitter-card.png">
 <meta name="twitter:creator" content="@josh_a_cullen">
 <meta name="twitter:card" content="summary_large_image">
@@ -69,7 +69,7 @@ ul.task-list{list-style: none;}
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Space-use and behavioral state estimation from animal telemetry data</h1>
+      <h1 class="quarto-secondary-nav-title"><span style="font-family: Georgia; font-size: 3rem;">Space-use and behavioral state estimation from animal telemetry data</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -152,14 +152,27 @@ ul.task-list{list-style: none;}
 </nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#how-to-extract-more-from-your-animal-movement-data-in-r" id="toc-how-to-extract-more-from-your-animal-movement-data-in-r" class="nav-link active" data-scroll-target="#how-to-extract-more-from-your-animal-movement-data-in-r">How to extract more from your animal movement data in R</a></li>
+  <li><a href="#workshop-overview-and-motivation" id="toc-workshop-overview-and-motivation" class="nav-link" data-scroll-target="#workshop-overview-and-motivation">Workshop overview and motivation</a>
+  <ul class="collapse">
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives">Learning objectives</a></li>
+  <li><a href="#who-is-this-workshop-aimed-at" id="toc-who-is-this-workshop-aimed-at" class="nav-link" data-scroll-target="#who-is-this-workshop-aimed-at">Who is this workshop aimed at?</a></li>
+  </ul></li>
+  <li><a href="#instructor" id="toc-instructor" class="nav-link" data-scroll-target="#instructor">Instructor</a></li>
+  <li><a href="#preparing-for-the-workshop" id="toc-preparing-for-the-workshop" class="nav-link" data-scroll-target="#preparing-for-the-workshop">Preparing for the workshop</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Space-use and behavioral state estimation from animal telemetry data</h1>
+<h1 class="title d-none d-lg-block"><span style="font-family: Georgia; font-size: 3rem;">Space-use and behavioral state estimation from animal telemetry data</span></h1>
 </div>
 
 
@@ -173,22 +186,74 @@ ul.task-list{list-style: none;}
 
 </header>
 
+<section id="how-to-extract-more-from-your-animal-movement-data-in-r" class="level1">
+<h1>How to extract more from your animal movement data in R</h1>
+<p>A NSF-funded workshop by <a href="https://joshcullen.github.io">Josh Cullen</a></p>
+<hr>
+<p><span class="code">📆  September 8 - 9, 2022</span><br>
+<span class="code">⏰  9:00 am - 5:00 pm</span><br>
+<span class="code">🏫  Florida State University, EOAS 3063</span><br>
+</p>
+<hr>
+</section>
+<section id="workshop-overview-and-motivation" class="level1">
+<h1>Workshop overview and motivation</h1>
 <p>The collection, analysis, and inferences made from animals tracked via satellite and acoustic telemetry have become common within the field of animal movement ecology and conservation. With these datasets, researchers and conservation practitioners are often interested in what the tagged animals are doing and where they’re doing it. There are an ever-growing number of tools that can make it difficult to determine which method to use for a particular project goal or dataset. This 2-day workshop will present a set of established methods commonly used to account for location error, estimate unobserved animal behavioral states and space-use, as well as some cutting-edge methods that have recently been developed.</p>
 <div class="quarto-layout-panel">
 <div class="quarto-layout-row quarto-layout-valign-top">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img src="images/Promo_behavior_plot.png" class="img-fluid"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/Promo_behavior_plot.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Behavioral state estimates from the <code>foieGras</code> package</figcaption><p></p>
+</figure>
+</div>
 </div>
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img src="images/Promo_KDE_plot.png" class="img-fluid"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/Promo_KDE_plot.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Kernel density estimates of space-use from the <code>amt</code> package</figcaption><p></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
 <p>Additionally, a set of guidelines will be presented as to how practitioners should decide which method is best for their project and data needs. The focus of this workshop will be on satellite telemetry data (i.e., GPS, Argos, light-level geolocation) for aquatic species using the R programming language, but is applicable to terrestrial species and some instances of acoustic telemetry.</p>
-<p>This workshop assumes that participants have an intermediate knowledge of the R programming language and are generally familiar with animal telemetry data. If you have any questions, please contact me at joshcullen10 [at] gmail.com. <br> <br></p>
+<p>If you have any questions, please contact me at joshcullen10 [at] gmail.com.</p>
+<section id="learning-objectives" class="level2">
+<h2 class="anchored" data-anchor-id="learning-objectives">Learning objectives</h2>
+<ul>
+<li>Gain experience in exploring many aspects of collected satellite telemetry data</li>
+<li>Learn how to account for location error using state-space models</li>
+<li>Learn how to implement advanced statistical models to estimate behavioral states</li>
+<li>Learn how to implement a variety of methods to estimate space-use</li>
+<li>Understand how to decide among different methods to estimate behavioral states and/or space-use depending on the study objectives and available data</li>
+<li>Gain experience in generating plots to visualize model results and disseminate findings</li>
+</ul>
+</section>
+<section id="who-is-this-workshop-aimed-at" class="level2">
+<h2 class="anchored" data-anchor-id="who-is-this-workshop-aimed-at">Who is this workshop aimed at?</h2>
+<ul>
+<li>Advanced undergraduate students, graduate students, postdocs, and any other professionals that would like to learn more about the available options for study animal movement ecology</li>
+<li>Intermediate to advanced R users</li>
+<li>Practitioners familiar with animal telemetry data</li>
+<li>Beginner to intermediate GIS users</li>
+</ul>
+</section>
+</section>
+<section id="instructor" class="level1">
+<h1>Instructor</h1>
+<p><img src="images/Cullen_lab_photo.jpeg" class="img-fluid" style="float:right;padding: 0 0 0 10px;" alt="Headshot of Dr. Josh Cullen" width="400"></p>
+<p>Dr.&nbsp;Josh Cullen is an NSF postdoctoral fellow and quantitative ecologist that is interested in animal movement ecology and integrative organismal biology. He is currently working on a project to develop a transferable species distribution modeling approach that will be applicable across taxa, but uses green turtles (<em>Chelonia mydas</em>) as a focal species. Josh has been involved with a variety of projects related to animal movement ecology from his PhD and previous postdoctoral position, including the investigation of hawksbill turtles (<em>Eretmochelys imbricata</em>) in the Arabian Gulf, endangered Everglade snail kites (<em>Rostrhamus sociabilis plumbeus</em>) in Florida, and giant armadillos (<em>Priodontes maximus</em>) in the Brazilian Pantanal. Josh has also assisted in the development of a set of non-parametric Bayesian models for estimating change points and behavioral states from biotelemetry data, which are available in the <a href="https://joshcullen.github.io/bayesmove">bayesmove</a> package in R. Due to his recent comparison of available methods to estimate behavioral states from animal telemetry data (<a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13745">Cullen et al., 2021</a>), Josh is familiar with the benefits and drawbacks of the most commonly available methods. He regularly performs exploratory data analysis, data wrangling, visualization, and GIS operations all using the R programming language and mentors undergraduate and graduate students in applying these skills as part of their research projects.</p>
+</section>
+<section id="preparing-for-the-workshop" class="level1">
+<h1>Preparing for the workshop</h1>
+<p>Since the workshop will use a wide range of R packages, some of which require a C++ compiler, it will be best for all participants to download and ensure that all necessary software are properly installed before attending the workshop. More details can be found on the <a href="./workshop-prep.html">Preparing for Workshop</a> page of this website. <br> <br></p>
 <p><em>This material is based upon work supported by the National Science Foundation under Grant Numbers 2126583 and 1904818. Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.</em></p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
