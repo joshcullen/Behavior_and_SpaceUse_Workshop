@@ -56,7 +56,7 @@ website:
 format:
   html:
     theme:
-      light: litera
+      light: [litera, theme.scss]
       dark: darkly
     mainfont: "Atkinson Hyperlegible"
     code-copy: true

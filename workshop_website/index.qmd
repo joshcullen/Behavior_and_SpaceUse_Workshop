@@ -1,19 +1,61 @@
 ---
-title: "Space-use and behavioral state estimation from animal telemetry data"
+title: "<span style='font-family: Georgia; font-size: 3rem;'>Space-use and behavioral state estimation from animal telemetry data</span>"
 ---
+
+# How to extract more from your animal movement data in R
+
+A NSF-funded workshop by [Josh Cullen](https://joshcullen.github.io)
+
+------------------------------------------------------------------------
+
+<span class='code'>📆 &ensp;September 8 - 9, 2022</span>\
+<span class='code'>⏰ &ensp;9:00 am - 5:00 pm</span>\
+<span class='code'>🏫 &ensp;Florida State University, EOAS 3063</span>\
+
+------------------------------------------------------------------------
+
+# Workshop overview and motivation
 
 The collection, analysis, and inferences made from animals tracked via satellite and acoustic telemetry have become common within the field of animal movement ecology and conservation. With these datasets, researchers and conservation practitioners are often interested in what the tagged animals are doing and where they’re doing it. There are an ever-growing number of tools that can make it difficult to determine which method to use for a particular project goal or dataset. This 2-day workshop will present a set of established methods commonly used to account for location error, estimate unobserved animal behavioral states and space-use, as well as some cutting-edge methods that have recently been developed.
 
 ::: {layout-ncol=2}
-![](images/Promo_behavior_plot.png)
+![Behavioral state estimates from the `foieGras` package](images/Promo_behavior_plot.png)
 
-![](images/Promo_KDE_plot.png)
+![Kernel density estimates of space-use from the `amt` package](images/Promo_KDE_plot.png)
 :::
 
 
 Additionally, a set of guidelines will be presented as to how practitioners should decide which method is best for their project and data needs. The focus of this workshop will be on satellite telemetry data (i.e., GPS, Argos, light-level geolocation) for aquatic species using the R programming language, but is applicable to terrestrial species and some instances of acoustic telemetry.
 
-This workshop assumes that participants have an intermediate knowledge of the R programming language and are generally familiar with animal telemetry data. If you have any questions, please contact me at joshcullen10 [at] gmail.com.
+If you have any questions, please contact me at joshcullen10 [at] gmail.com.
+
+## Learning objectives
+
+- Gain experience in exploring many aspects of collected satellite telemetry data 
+- Learn how to account for location error using state-space models
+- Learn how to implement advanced statistical models to estimate behavioral states
+- Learn how to implement a variety of methods to estimate space-use
+- Understand how to decide among different methods to estimate behavioral states and/or space-use depending on the study objectives and available data
+- Gain experience in generating plots to visualize model results and disseminate findings
+
+## Who is this workshop aimed at?
+
+- Advanced undergraduate students, graduate students, postdocs, and any other professionals that would like to learn more about the available options for study animal movement ecology
+- Intermediate to advanced R users
+- Practitioners familiar with animal telemetry data
+- Beginner to intermediate GIS users
+
+
+# Instructor
+
+![](images/Cullen_lab_photo.jpeg){style="float:right;padding: 0 0 0 10px;" fig-alt="Headshot of Dr. Josh Cullen" width="400"}
+
+Dr. Josh Cullen is an NSF postdoctoral fellow and quantitative ecologist that is interested in animal movement ecology and integrative organismal biology. He is currently working on a project to develop a transferable species distribution modeling approach that will be applicable across taxa, but uses green turtles (*Chelonia mydas*) as a focal species. Josh has been involved with a variety of projects related to animal movement ecology from his PhD and previous postdoctoral position, including the investigation of hawksbill turtles (*Eretmochelys imbricata*) in the Arabian Gulf, endangered Everglade snail kites (*Rostrhamus sociabilis plumbeus*) in Florida, and giant armadillos (*Priodontes maximus*) in the Brazilian Pantanal. Josh has also assisted in the development of a set of non-parametric Bayesian models for estimating change points and behavioral states from biotelemetry data, which are available in the [bayesmove](https://joshcullen.github.io/bayesmove) package in R. Due to his recent comparison of available methods to estimate behavioral states from animal telemetry data ([Cullen et al., 2021](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13745)), Josh is familiar with the benefits and drawbacks of the most commonly available methods. He regularly performs exploratory data analysis, data wrangling, visualization, and GIS operations all using the R programming language and mentors undergraduate and graduate students in applying these skills as part of their research projects.
+
+
+# Preparing for the workshop
+
+Since the workshop will use a wide range of R packages, some of which require a C++ compiler, it will be best for all participants to download and ensure that all necessary software are properly installed before attending the workshop. More details can be found on the [Preparing for Workshop](workshop-prep.qmd) page of this website.
 <br>
 <br>
 
