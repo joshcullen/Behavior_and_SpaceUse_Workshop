@@ -23,7 +23,7 @@ glimpse(dat)
 summary(dat)
 
 
-### Wrangle and prep data for estimation of MCPs ###
+### Wrangle and prep data for KDE ###
 
 dat <- dat %>%
   mutate(date = as_datetime(date))
