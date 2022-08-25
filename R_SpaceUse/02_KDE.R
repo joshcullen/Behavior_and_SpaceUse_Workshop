@@ -15,15 +15,15 @@ library(units)
 
 
 
-### Load data ###
+#### Load data ####
 
-dat <- read.csv('Processed_data/SSM_mp_FDN_irreg Cmydas tracks.csv')
+dat <- read.csv('Processed_data/SSM_mp8hr_FDN Cmydas tracks.csv')
 
 glimpse(dat)
 summary(dat)
 
 
-### Wrangle and prep data for KDE ###
+#### Wrangle and prep data for KDE ####
 
 dat <- dat %>%
   mutate(date = as_datetime(date))
@@ -32,13 +32,13 @@ dat.track <- make_track(dat, x, y, date, crs = "+proj=merc +lon_0=0 +datum=WGS84
                         all_cols = TRUE)
 
 # Create template raster for KDE
-trast <- make_trast(dat.track, res = 4)
+trast <- make_trast(dat.track, res = 4)  #resolution is 4 x 4 km
 
 
 
 
 
-### Calculate KDE for all IDs ###
+#### Calculate KDE for all IDs ####
 
 ## Href (reference bandwidth method)
 dat.kde.ref <- hr_kde(dat.track, trast = trast, h = hr_kde_ref(dat.track), levels = c(0.5, 0.95))
@@ -99,7 +99,11 @@ ggplot() +
 
 
 
-### Calculate KDE per ID ###
+#### Calculate KDE per ID ####
+
+# If interested in installing a package that produces sounds when your code is finished running, this is my favorite (BRRR)
+# https://github.com/brooke-watson/BRRR
+# devtools::install_github("brooke-watson/BRRR")
 
 
 ## Href
@@ -107,16 +111,16 @@ ggplot() +
 # Need to turn data.frame into list to map hr_kde() function and then recombine
 tic()
 dat.id.kde.href <- dat.track %>%
-  split(.$id) %>%
-  map(~hr_kde(.x,
-              trast = make_trast(.x, res = 0.5),
-              h = hr_kde_ref(.x),
+  split(.$id) %>%  #split into list by ID
+  map(~hr_kde(.x,  #map hr_kde() onto each list element (i.e., ID)
+              trast = make_trast(.x, res = 0.5),  #define spatial res of raster
+              h = hr_kde_ref(.x),  #define bandwidth for KDE
               levels = c(0.5, 0.95))
       ) %>%
-  map(hr_isopleths) %>%
-  do.call(rbind, .)
-toc()  #takes 2 min to run
-BRRR::skrrrahh('ross1')
+  map(hr_isopleths) %>%  #extract contours from raster layers
+  do.call(rbind, .)  #merge all contours into single `sf` object
+toc()  #takes 28 sec to run
+BRRR::skrrrahh('ross1')  #let me know that it's done running!
 
 dat.id.kde.href <- dat.id.kde.href %>%
   mutate(id = rownames(.), .before = level) %>%
@@ -163,7 +167,7 @@ dat.mig.kde.hpi <- dat.id.list[mig.ind] %>%
   ) %>%
   map(hr_isopleths) %>%
   do.call(rbind, .)
-toc()  #takes 22 sec to run
+toc()  #takes 3 sec to run
 BRRR::skrrrahh('khaled3')
 
 
@@ -198,7 +202,7 @@ ggplot() +
 
 
 
-### Compare KDE estimates between methods for bandwidth estimation ###
+#### Compare KDE estimates between methods for bandwidth estimation ####
 
 # Collate both ID-level data.frames together
 dat.id.kde.href$method <- 'href'
@@ -212,3 +216,11 @@ ggplot(dat.id.kde, aes(factor(level), area, color = method)) +
   scale_color_met_d("Hokusai3") +
   theme_bw()
 
+
+
+
+
+
+#### Export datasets for easy loading ####
+
+save(dat.id.kde.href, dat.id.kde.hpi, file = "Processed_data/KDE_fits.RData")

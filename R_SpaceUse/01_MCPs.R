@@ -11,15 +11,15 @@ library(rnaturalearth)
 library(plotly)
 
 
-### Load data ###
+#### Load data ####
 
-dat <- read.csv('Processed_data/SSM_mp_FDN_irreg Cmydas tracks.csv')
+dat <- read.csv('Processed_data/SSM_mp8hr_FDN Cmydas tracks.csv')
 
 glimpse(dat)
 summary(dat)
 
 
-### Wrangle and prep data for estimation of MCPs ###
+#### Wrangle and prep data for estimation of MCPs ####
 
 dat <- dat %>%
   mutate(date = as_datetime(date))
@@ -28,7 +28,7 @@ dat.track <- make_track(dat, lon, lat, date, crs = 4326, all_cols = TRUE)
 
 
 
-### Calculate MCPs for all IDs ###
+#### Calculate MCPs for all IDs ####
 
 dat.mcp <- hr_mcp(dat.track, levels = c(0.5, 0.95, 1))
 dat.mcp
@@ -50,7 +50,7 @@ ggplot() +
 
 
 
-### Calculate MCPs per ID (at 95% level) ###
+#### Calculate MCPs per ID (at 95% level) ####
 
 # Need to turn data.frame into list to map hr_mcp() function and then recombine
 dat.id.mcp <- dat.track %>%
@@ -63,11 +63,19 @@ dat.id.mcp <- dat.id.mcp %>%
   mutate(id = rownames(.), .before = level)
 
 
+ggplotly(
+  ggplot() +
+    geom_sf(data = brazil) +
+    geom_point(data = dat, aes(lon, lat, color = factor(id)), alpha = 0.25, size = 1) +
+    geom_sf(data = dat.id.mcp, aes(color = id), fill = 'transparent', size = 0.75) +
+    scale_color_viridis_d() +
+    theme_bw() +
+    coord_sf(xlim = c(-42, -32), ylim = c(-8, -2))
+)
 
-ggplot() +
-  geom_sf(data = brazil) +
-  geom_point(data = dat, aes(lon, lat, color = factor(id)), alpha = 0.25, size = 1) +
-  geom_sf(data = dat.id.mcp, aes(color = id), fill = 'transparent', size = 0.75) +
-  scale_color_viridis_d() +
-  theme_bw() +
-  coord_sf(xlim = c(-42, -32), ylim = c(-8, -2))
+
+
+
+#### Export datasets for easy loading ####
+
+save(dat.id.mcp, file = "Processed_data/MCP_fits.RData")

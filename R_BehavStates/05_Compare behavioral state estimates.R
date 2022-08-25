@@ -14,7 +14,7 @@ library(plotly)
 
 
 
-### Load the model results from each method ###
+#### Load the model results from each method ####
 
 load("Processed_data/SSM_model_fits.RData")
 load("Processed_data/HMM_data_and_model_fits.RData")
@@ -22,39 +22,39 @@ load("Processed_data/bayesmove_model_fits.RData")
 
 
 
-### Wrangle model results to compile into data.frame ###
+#### Wrangle model results to compile into data.frame ####
 
-ssm_res<- join(ssm = fit_crw_6hr,
-               mpm = fit_crw_mpm_6hr,
+ssm_res<- join(ssm = fit_crw_8hr,
+               mpm = fit_crw_mpm_8hr,
                what.ssm = "predicted")
 
 hmm_res <- dat3 %>%
-  mutate(state = viterbi(fit_hmm_3states_3covars))
+  mutate(state = viterbi(fit_hmm_3states_3vars))
 
 bayes_res <- dat.out2
 
 
 
-### Compare state-dependent distributions from HMM and M4 (bayesmove) ###
+#### Compare state-dependent distributions from HMM and M4 (bayesmove) ####
 
 # HMM
-plot(fit_hmm_3states_3covars, plotTracks = FALSE)
+plot(fit_hmm_3states_3vars, plotTracks = FALSE)
 
 
 # M4
-behav.res.seg <- behav.res.seg %>%
-  mutate(behav1 = case_when(behav == 1 ~ 'Migratory',
-                           behav == 2 ~ 'Breeding_Encamped',
+behav.res.seg2 <- behav.res.seg %>%
+  mutate(behav1 = case_when(behav == 1 ~ 'Breeding_Encamped',
+                           behav == 2 ~ 'Migratory',
                            behav == 3 ~ 'Foraging1',
                            behav == 4 ~ 'Foraging2',
-                           behav == 5 ~ 'Foraging3',
+                           behav == 5 ~ 'Breeding_ARS',
                            TRUE ~ behav)) %>%
   filter(!behav %in% c(6,7)) %>%
-  mutate(across(behav1, factor, levels = c('Breeding_Encamped','Migratory','Foraging1',
-                                           'Foraging2','Foraging3')))
+  mutate(across(behav1, factor, levels = c('Breeding_Encamped','Breeding_ARS','Foraging1',
+                                           'Foraging2','Migratory')))
 
 
-ggplot(behav.res.seg, aes(x = bin.vals, y = prop, fill = behav1)) +
+ggplot(behav.res.seg2, aes(x = bin.vals, y = prop, fill = behav1)) +
   geom_bar(stat = 'identity') +
   labs(x = "\nBin", y = "Proportion\n") +
   theme_bw() +
@@ -71,13 +71,13 @@ ggplot(behav.res.seg, aes(x = bin.vals, y = prop, fill = behav1)) +
 
 
 
-### Viz time series of state estimates ###
+#### Viz time series of state estimates ####
 
 # SSM
-plot(fit_crw_mpm_6hr)
+plot(fit_crw_mpm_8hr)
 
 # HMM
-plotStates(fit_hmm_3states_3covars)
+plotStates(fit_hmm_3states_3vars)
 
 # M4
 ggplot(theta.estim.long) +
@@ -95,27 +95,27 @@ ggplot(theta.estim.long) +
 
 
 
-### Viz map of behavioral state estimates across methods ###
+#### Viz map of behavioral state estimates across methods ####
 
 brazil <- ne_countries(scale = 50, country = "brazil", returnclass = 'sf') %>%
   st_transform(crs = "+proj=merc +lon_0=0 +datum=WGS84 +units=km +no_defs")
 
 
 
-## Compare w/ focal PTT 226067
+## Compare w/ focal PTT 205537
 
 # SSM
-ssm_res_226067 <- filter(ssm_res, id == 226067)
+ssm_res_205537 <- filter(ssm_res, id == 205537)
 
 ggplotly(
   ggplot() +
     geom_sf(data = brazil) +
-    geom_path(data = ssm_res_226067, aes(x=x, y=y), color="grey60", size=0.25) +
-    geom_point(data = ssm_res_226067, aes(x, y, color=g), size=1.5, alpha=0.7) +
-    geom_point(data = ssm_res_226067 %>%
+    geom_path(data = ssm_res_205537, aes(x=x, y=y), color="grey60", size=0.25) +
+    geom_point(data = ssm_res_205537, aes(x, y, color=g), size=1.5, alpha=0.7) +
+    geom_point(data = ssm_res_205537 %>%
                  slice(which(row_number() == 1)), aes(x, y), color = "green", pch = 21,
                size = 3, stroke = 1.25) +
-    geom_point(data = ssm_res_226067 %>%
+    geom_point(data = ssm_res_205537 %>%
                  slice(which(row_number() == n())), aes(x, y), color = "red", pch = 24,
                size = 3, stroke = 1.25) +
     scale_color_viridis_c("SSM Behavior") +
@@ -124,14 +124,14 @@ ggplotly(
     theme(axis.title = element_text(size = 16),
           strip.text = element_text(size = 14, face = "bold"),
           panel.grid = element_blank()) +
-    coord_sf(xlim = c(min(ssm_res_226067$x - 50), max(ssm_res_226067$x + 50)),
-             ylim = c(min(ssm_res_226067$y - 50), max(ssm_res_226067$y + 50)))
+    coord_sf(xlim = c(min(ssm_res_205537$x - 50), max(ssm_res_205537$x + 50)),
+             ylim = c(min(ssm_res_205537$y - 50), max(ssm_res_205537$y + 50)))
 )
 
 
 # HMM
-hmm_res_226067 <- hmm_res %>%
-  filter(ID == 226067) %>%
+hmm_res_205537 <- hmm_res %>%
+  filter(ID == 205537) %>%
   mutate(state1 = case_when(state == 1 ~ 'Breeding_Encamped',
                             state == 2 ~ 'Foraging',
                             state == 3 ~ 'Migratory'))
@@ -139,12 +139,12 @@ hmm_res_226067 <- hmm_res %>%
 ggplotly(
   ggplot() +
     geom_sf(data = brazil) +
-    geom_path(data = hmm_res_226067, aes(x=x, y=y), color="grey60", size=0.25) +
-    geom_point(data = hmm_res_226067, aes(x, y, color=state1), size=1.5, alpha=0.7) +
-    geom_point(data = hmm_res_226067 %>%
+    geom_path(data = hmm_res_205537, aes(x=x, y=y), color="grey60", size=0.25) +
+    geom_point(data = hmm_res_205537, aes(x, y, color=state1), size=1.5, alpha=0.7) +
+    geom_point(data = hmm_res_205537 %>%
                  slice(which(row_number() == 1)), aes(x, y), color = "green", pch = 21,
                size = 3, stroke = 1.25) +
-    geom_point(data = hmm_res_226067 %>%
+    geom_point(data = hmm_res_205537 %>%
                  slice(which(row_number() == n())), aes(x, y), color = "red", pch = 24,
                size = 3, stroke = 1.25) +
     scale_color_viridis_d("HMM Behavior") +
@@ -153,24 +153,24 @@ ggplotly(
     theme(axis.title = element_text(size = 16),
           strip.text = element_text(size = 14, face = "bold"),
           panel.grid = element_blank()) +
-    coord_sf(xlim = c(min(hmm_res_226067$x - 50), max(hmm_res_226067$x + 50)),
-             ylim = c(min(hmm_res_226067$y - 50), max(hmm_res_226067$y + 50)))
+    coord_sf(xlim = c(min(hmm_res_205537$x - 50), max(hmm_res_205537$x + 50)),
+             ylim = c(min(hmm_res_205537$y - 50), max(hmm_res_205537$y + 50)))
 )
 
 
 # M4
-bayes_res_226067 <- bayes_res %>%
-  filter(id == 226067)
+bayes_res_205537 <- bayes_res %>%
+  filter(id == 205537)
 
 ggplotly(
   ggplot() +
     geom_sf(data = brazil) +
-    geom_path(data = bayes_res_226067, aes(x=x, y=y), color="grey60", size=0.25) +
-    geom_point(data = bayes_res_226067, aes(x, y, color=behav), size=1.5, alpha=0.7) +
-    geom_point(data = bayes_res_226067 %>%
+    geom_path(data = bayes_res_205537, aes(x=x, y=y), color="grey60", size=0.25) +
+    geom_point(data = bayes_res_205537, aes(x, y, color=behav), size=1.5, alpha=0.7) +
+    geom_point(data = bayes_res_205537 %>%
                  slice(which(row_number() == 1)), aes(x, y), color = "green", pch = 21,
                size = 3, stroke = 1.25) +
-    geom_point(data = bayes_res_226067 %>%
+    geom_point(data = bayes_res_205537 %>%
                  slice(which(row_number() == n())), aes(x, y), color = "red", pch = 24,
                size = 3, stroke = 1.25) +
     scale_color_viridis_d("Bayesian M4 Behavior") +
@@ -179,19 +179,19 @@ ggplotly(
     theme(axis.title = element_text(size = 16),
           strip.text = element_text(size = 14, face = "bold"),
           panel.grid = element_blank()) +
-    coord_sf(xlim = c(min(bayes_res_226067$x - 50), max(bayes_res_226067$x + 50)),
-             ylim = c(min(bayes_res_226067$y - 50), max(bayes_res_226067$y + 50)))
+    coord_sf(xlim = c(min(bayes_res_205537$x - 50), max(bayes_res_205537$x + 50)),
+             ylim = c(min(bayes_res_205537$y - 50), max(bayes_res_205537$y + 50)))
 )
 
 ggplotly(
   ggplot() +
     geom_sf(data = brazil) +
-    geom_path(data = bayes_res_226067, aes(x=x, y=y), color="grey60", size=0.25) +
-    geom_point(data = bayes_res_226067, aes(x, y, color=Foraging), size=1.5, alpha=0.7) +
-    geom_point(data = bayes_res_226067 %>%
+    geom_path(data = bayes_res_205537, aes(x=x, y=y), color="grey60", size=0.25) +
+    geom_point(data = bayes_res_205537, aes(x, y, color=Foraging), size=1.5, alpha=0.7) +
+    geom_point(data = bayes_res_205537 %>%
                  slice(which(row_number() == 1)), aes(x, y), color = "green", pch = 21,
                size = 3, stroke = 1.25) +
-    geom_point(data = bayes_res_226067 %>%
+    geom_point(data = bayes_res_205537 %>%
                  slice(which(row_number() == n())), aes(x, y), color = "red", pch = 24,
                size = 3, stroke = 1.25) +
     scale_color_viridis_c("Bayesian M4 Behavior", option = 'inferno', end = 0.95) +
@@ -200,6 +200,6 @@ ggplotly(
     theme(axis.title = element_text(size = 16),
           strip.text = element_text(size = 14, face = "bold"),
           panel.grid = element_blank()) +
-    coord_sf(xlim = c(min(bayes_res_226067$x - 50), max(bayes_res_226067$x + 50)),
-             ylim = c(min(bayes_res_226067$y - 50), max(bayes_res_226067$y + 50)))
+    coord_sf(xlim = c(min(bayes_res_205537$x - 50), max(bayes_res_205537$x + 50)),
+             ylim = c(min(bayes_res_205537$y - 50), max(bayes_res_205537$y + 50)))
 )

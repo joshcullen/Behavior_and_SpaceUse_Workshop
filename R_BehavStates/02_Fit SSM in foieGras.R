@@ -10,18 +10,18 @@ library(sf)  #v1.0.7
 library(rnaturalearth)
 library(tictoc)
 library(plotly)
-library(future)  #needed to properly run foieGras::osar() in parallel
+# library(future)  #needed to properly run foieGras::osar() in parallel
 
 
-### Load data ###
+#### Load data ####
 
 dat <- read.csv('Processed_data/Cleaned_FDN Cmydas tracks.csv')
 
-glimpse(dat)
+glimpse(dat); str(dat)
 summary(dat)
 
 
-### Wrangle data for analysis using {foieGras} ###
+#### Wrangle data for analysis using {foieGras} ####
 
 # Convert all 'Quality' values to "G" for FastGPS data and 'Date' to datetime format
 dat <- dat %>%
@@ -40,7 +40,7 @@ glimpse(dat2)
 
 
 
-### Inspect time steps of transmissions for making predictions ###
+#### Inspect time steps of transmissions for making predictions ####
 
 tmp <- dat2 %>%
   split(.$id) %>%
@@ -57,32 +57,18 @@ ggplot(tmp, aes(date, dt)) +
   geom_point() +
   theme_bw() +
   facet_wrap(~id, scales = "free_x")
-# it looks like there are some very large gaps in the tracks for PTTs 41587, 41588; let's remove these points that occur before (or after) depending on the ID
+# some outliers present, but nothing to worry about for now
 
 
-# Find rows where 1st dt of an ID is > 7 d (604800 secs)
-ind <- tmp %>%
-  group_by(id) %>%
-  filter(dt > 3600*24*7) %>%
-  slice(1)
-
-# Remove obs before or after a gap of 7 days
-dat3 <- dat2 %>%
-  filter(!(id == 41587 & date <= ind$date[1])) %>%
-  filter(!(id == 41588 & date >= ind$date[2]))
 
 # Determine primary time step
 ggplot(tmp) +
   geom_histogram(aes(dt), binwidth = 3600) +
   theme_bw() +
-  xlim(0,3600*24)
+  xlim(0, 3600*24)
 
-table(tmp$dt) %>%
-  sort(decreasing = TRUE)
 
 tmp %>%
-  filter(!(id == 41587 & date <= ind$date[1])) %>%
-  filter(!(id == 41588 & date >= ind$date[2])) %>%
   group_by(id) %>%
   summarize(mean = mean(dt, na.rm = TRUE),
             median = median(dt, na.rm = TRUE))
@@ -91,21 +77,22 @@ tmp %>%
 
 
 
-
-### Run SSM ###
+#################
+#### Run SSM ####
+#################
 
 # Change `id` to character to avoid problems during model runs
-dat3$id <- as.character(dat3$id)
+dat2$id <- as.character(dat2$id)
 
 
 
-### Using correlated random walk (CRW) model
+#### Account for location error at observed irregular time interval ####
 
 # Estimate 'true' locations on irregular sampling interval (by setting `time.step = NA`)
 tic()
-fit_crw_fitted <- fit_ssm(dat3, vmax = 3, model = "crw", time.step = NA,
+fit_crw_fitted <- fit_ssm(dat2, vmax = 3, model = "crw", time.step = NA,
                           control = ssm_control(verbose = 1))
-toc()  #took 2 min where time.step = NA
+toc()  #took 30 sec where time.step = NA
 
 print(fit_crw_fitted)
 
@@ -114,7 +101,9 @@ print(fit_crw_fitted)
 plot(fit_crw_fitted, what = "fitted", type = 1, ask = TRUE)
 plot(fit_crw_fitted, what = "fitted", type = 2, ask = TRUE)
 
-map(fit_crw_fitted, what = "fitted", aes = aes_lst(mp_pal = hcl.colors(n=100, "viridis")))
+foieGras::map(fit_crw_fitted,
+    what = "fitted",
+    by.id = TRUE)
 
 
 # Estimate behavioral state (i.e., move persistence; gamma)
@@ -122,7 +111,7 @@ map(fit_crw_fitted, what = "fitted", aes = aes_lst(mp_pal = hcl.colors(n=100, "v
 tic()
 fit_crw_jmpm_fitted <- fit_mpm(fit_crw_fitted, what = "fitted", model = "jmpm",
                               control = mpm_control(verbose = 1))
-toc()  #took 5 min to fit
+toc()  #took 48 sec to fit
 
 print(fit_crw_jmpm_fitted)
 plot(fit_crw_jmpm_fitted)
@@ -195,22 +184,23 @@ res_crw_fitted %>%
 
 
 
+#### Account for location error at regularized time interval with correlated random walk ####
 
-# Estimate 'true' locations on regular sampling interval of 6 hrs
+# Estimate 'true' locations on regular sampling interval of 8 hrs
 tic()
-fit_crw_6hr <- fit_ssm(dat3, vmax = 3, model = "crw", time.step = 6,
+fit_crw_8hr <- fit_ssm(dat2, vmax = 3, model = "crw", time.step = 8,
                           control = ssm_control(verbose = 1))
-toc()  #took 2 min to fit model
+toc()  #took 34 sec to fit model
 
-print(fit_crw_6hr)
+print(fit_crw_8hr)
 
 
 # Viz the filtered outliers (gold), raw observations (blue), and estimated locations (red), along with associated uncertainty (red shading)
-plot(fit_crw_6hr, what = "predicted", type = 1, ask = TRUE)
-plot(fit_crw_6hr, what = "predicted", type = 2, ask = TRUE)
+plot(fit_crw_8hr, what = "predicted", type = 1, ask = TRUE)
+plot(fit_crw_8hr, what = "predicted", type = 2, ask = TRUE)
 
-# plot(fit_crw_6hr, what = "fitted", type = 1, ask = TRUE)
-# plot(fit_crw_6hr, what = "fitted", type = 2, ask = TRUE)
+# plot(fit_crw_8hr, what = "fitted", type = 1, ask = TRUE)
+# plot(fit_crw_8hr, what = "fitted", type = 2, ask = TRUE)
 
 
 
@@ -218,18 +208,19 @@ plot(fit_crw_6hr, what = "predicted", type = 2, ask = TRUE)
 # Estimate behavioral state (i.e., move persistence; gamma)
 # Individual move persistence model ('mpm') estimates behavioral states separately across IDs
 tic()
-fit_crw_mpm_6hr <- fit_mpm(fit_crw_6hr, what = "predicted", model = "mpm",
+fit_crw_mpm_8hr <- fit_mpm(fit_crw_8hr, what = "predicted", model = "mpm",
                               control = mpm_control(verbose = 1))
-toc()  #took 49 sec to fit
+toc()  #took 6 sec to fit
+#if issues w/ model not converging, try changing time step of SSM and re-running
 
-print(fit_crw_mpm_6hr)  #model for PTT 205537 didn't converge
-plot(fit_crw_mpm_6hr)
+print(fit_crw_mpm_8hr)
+plot(fit_crw_mpm_8hr)
 
 
 
 # Grab results and plot
-res_crw_6hr<- join(ssm = fit_crw_6hr,
-                      mpm = fit_crw_mpm_6hr,
+res_crw_8hr<- join(ssm = fit_crw_8hr,
+                      mpm = fit_crw_mpm_8hr,
                       what.ssm = "predicted")
 
 
@@ -237,7 +228,7 @@ res_crw_6hr<- join(ssm = fit_crw_6hr,
 ggplot() +
   geom_sf(data = brazil) +
   geom_path(data = dat3, aes(lon, lat, group = id), color = 'black') +  #raw tracks
-  geom_path(data = res_crw_6hr, aes(lon, lat, group = id), color = "blue") +  #modeled tracks
+  geom_path(data = res_crw_8hr, aes(lon, lat, group = id), color = "blue") +  #modeled tracks
   theme_bw() +
   facet_wrap(~id) +
   coord_sf(xlim = c(-42, -32), ylim = c(-8, -1))
@@ -246,7 +237,7 @@ ggplot() +
 plotly::ggplotly(
   ggplot() +
     geom_sf(data = brazil, fill = "grey60") +
-    geom_path(data = res_crw_6hr, aes(lon, lat, group = id, color = id), size = 0.75, alpha = 0.8) +
+    geom_path(data = res_crw_8hr, aes(lon, lat, group = id, color = id), size = 0.75, alpha = 0.8) +
     scale_color_viridis_d() +
     theme_bw() +
     theme(panel.grid = element_blank()) +
@@ -257,7 +248,7 @@ plotly::ggplotly(
 plotly::ggplotly(
   ggplot() +
     geom_sf(data = brazil, fill = "grey60") +
-    geom_point(data = res_crw_6hr, aes(lon, lat, group = id, color = g), size = 0.75, alpha = 0.8) +
+    geom_point(data = res_crw_8hr, aes(lon, lat, group = id, color = g), size = 0.75, alpha = 0.8) +
     scale_color_viridis_c(option = "inferno") +
     theme_bw() +
     theme(panel.grid = element_blank()) +
@@ -270,7 +261,7 @@ plotly::ggplotly(
   ggplot() +
     geom_sf(data = brazil, fill = "grey60") +
     geom_path(data = res_crw_fitted, aes(lon, lat, group = id, color = id), size = 0.75, alpha = 0.3) +
-    geom_path(data = res_crw_6hr, aes(lon, lat, group = id, color = id), size = 0.75, alpha = 0.8) +
+    geom_path(data = res_crw_8hr, aes(lon, lat, group = id, color = id), size = 0.75, alpha = 0.8) +
     scale_color_viridis_d() +
     theme_bw() +
     theme(panel.grid = element_blank()) +
@@ -280,37 +271,39 @@ plotly::ggplotly(
 
 
 
-# Estimate 'true' locations on regular sampling interval of 6 hrs using 'move persistence' model
-tic()
-fit_mp_6hr <- fit_ssm(dat3, vmax = 3, model = "mp", time.step = 6,
-                       control = ssm_control(verbose = 1))
-toc()  #took 5 min to fit model
 
-print(fit_mp_6hr)
+#### Account for location error at regularized time interval w/ move persistence model ####
+
+# Estimate 'true' locations on regular sampling interval of 8 hrs using 'move persistence' model
+tic()
+fit_mp_8hr <- fit_ssm(dat2, vmax = 3, model = "mp", time.step = 8,
+                       control = ssm_control(verbose = 1))
+toc()  #took 1.25 min to fit model
+
+print(fit_mp_8hr)
 
 
 # Viz the filtered outliers (gold), raw observations (blue), and estimated locations (red), along with associated uncertainty (red shading)
-plot(fit_mp_6hr, what = "predicted", type = 1, ask = TRUE)
-plot(fit_mp_6hr, what = "predicted", type = 2, ask = TRUE)
-plot(fit_mp_6hr, what = "predicted", type = 3, ask = TRUE)
+plot(fit_mp_8hr, what = "predicted", type = 1, ask = TRUE)
+plot(fit_mp_8hr, what = "predicted", type = 2, ask = TRUE)
+plot(fit_mp_8hr, what = "predicted", type = 3, ask = TRUE)
 
-# plot(fit_mp_6hr, what = "fitted", type = 1, ask = TRUE)
-# plot(fit_mp_6hr, what = "fitted", type = 2, ask = TRUE)
-# plot(fit_mp_6hr, what = "fitted", type = 3, ask = TRUE)
+# plot(fit_mp_8hr, what = "fitted", type = 1, ask = TRUE)
+# plot(fit_mp_8hr, what = "fitted", type = 2, ask = TRUE)
+# plot(fit_mp_8hr, what = "fitted", type = 3, ask = TRUE)
 
 
 
 
 # Grab results and plot
-res_mp_6hr_pred<- grab(fit_mp_6hr, what = "predicted")
-res_mp_6hr_irreg<- grab(fit_mp_6hr, what = "fitted")
+res_mp_8hr_pred<- grab(fit_mp_8hr, what = "predicted")
 
 
 # Viz modeled tracks together
 plotly::ggplotly(
   ggplot() +
     geom_sf(data = brazil, fill = "grey60") +
-    geom_path(data = res_mp_6hr_pred, aes(lon, lat, group = id, color = id), size = 0.75,
+    geom_path(data = res_mp_8hr_pred, aes(lon, lat, group = id, color = id), size = 0.75,
               alpha = 0.8) +
     scale_color_viridis_d() +
     theme_bw() +
@@ -322,7 +315,7 @@ plotly::ggplotly(
 plotly::ggplotly(
   ggplot() +
     geom_sf(data = brazil, fill = "grey60") +
-    geom_point(data = res_mp_6hr_pred, aes(lon, lat, group = id, color = g), size = 0.75,
+    geom_point(data = res_mp_8hr_pred, aes(lon, lat, group = id, color = g), size = 0.75,
                alpha = 0.8) +
     scale_color_viridis_c(option = "inferno") +
     theme_bw() +
@@ -337,20 +330,20 @@ plotly::ggplotly(
 # Behavioral states
 ggplot() +
   geom_line(data = res_crw_fitted, aes(date, g, color = "CRW_Irregular")) +
-  geom_line(data = res_crw_6hr, aes(date, g, color = "CRW_6hr")) +
-  geom_line(data = res_mp_6hr_pred, aes(date, g, color = "MP_6hr")) +
+  geom_line(data = res_crw_8hr, aes(date, g, color = "CRW_8hr")) +
+  geom_line(data = res_mp_8hr_pred, aes(date, g, color = "MP_8hr")) +
   scale_color_manual(values = RColorBrewer::brewer.pal(3, "Dark2")) +
   theme_bw() +
   facet_wrap(~id, scales = "free_x")
 
-## Of these 3 different models, the CRW model w/ 6 hr prediction time step seems to give best broad scale state estimates
+## Of these 3 different models, the CRW model w/ 8 hr prediction time step seems to give best broad scale state estimates
 
 
 # Track relocations
 ggplot() +
   geom_path(data = res_crw_fitted, aes(x, y, color = "CRW_Irregular")) +
-  geom_path(data = res_crw_6hr, aes(x, y, color = "CRW_6hr")) +
-  geom_path(data = res_mp_6hr_pred, aes(x, y, color = "MP_6hr")) +
+  geom_path(data = res_crw_8hr, aes(x, y, color = "CRW_8hr")) +
+  geom_path(data = res_mp_8hr_pred, aes(x, y, color = "MP_8hr")) +
   scale_color_manual(values = RColorBrewer::brewer.pal(3, "Dark2")) +
   theme_bw() +
   facet_wrap(~id, scales = "free")
@@ -368,7 +361,6 @@ ggplot() +
 
 ### Export fitted tracks ###
 
-write.csv(res_mp_6hr_pred, "Processed_data/SSM_mp6hr_FDN Cmydas tracks.csv", row.names = FALSE)
-write.csv(res_mp_6hr_irreg, "Processed_data/SSM_mp_FDN_irreg Cmydas tracks.csv", row.names = FALSE)
+write.csv(res_mp_8hr_pred, "Processed_data/SSM_mp8hr_FDN Cmydas tracks.csv", row.names = FALSE)
 
-save(fit_crw_6hr, fit_crw_mpm_6hr, file = "Processed_data/SSM_model_fits.RData")
+save(fit_crw_8hr, fit_crw_mpm_8hr, file = "Processed_data/SSM_model_fits.RData")

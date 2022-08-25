@@ -4,7 +4,7 @@ title: "<span style='font-family: Georgia; font-size: 3rem;'>Space-use and behav
 
 # How to extract more from your animal movement data in R
 
-A NSF-funded workshop by [Josh Cullen](https://joshcullen.github.io)
+An NSF-funded workshop by [Josh Cullen](https://joshcullen.github.io)
 
 ------------------------------------------------------------------------
 

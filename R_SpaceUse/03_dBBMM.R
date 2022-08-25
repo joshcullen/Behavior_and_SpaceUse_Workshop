@@ -1,7 +1,7 @@
 
-########################################################
-### Calculate dynamic Brownian Bridge Movement Model ###
-########################################################
+################################################################
+### Calculate dynamic Brownian Bridge Movement Model (dBBMM) ###
+################################################################
 
 library(tidyverse)
 library(lubridate)
@@ -15,9 +15,9 @@ library(MetBrewer)
 
 
 
-### Load data ###
+#### Load data ####
 
-dat <- read.csv('Processed_data/SSM_mp6hr_FDN Cmydas tracks.csv')
+dat <- read.csv('Processed_data/SSM_mp8hr_FDN Cmydas tracks.csv')
 
 glimpse(dat)
 summary(dat)
@@ -25,39 +25,16 @@ summary(dat)
 
 
 
-### Wrangle and prep data for dBBMM estimation ###
+#### Wrangle and prep data for dBBMM estimation ####
 
 dat <- dat %>%
   mutate(date = as_datetime(date),  #convert to datetime format
          SE = ifelse(x.se > y.se, y.se, x.se))  #create new column with smallest location SE
 
-# Viz time steps per ID
-# dat <- dat %>%
-#   split(.$id) %>%
-#   purrr::map(., ~mutate(.x,
-#                         dt = difftime(c(date[-1], NA),
-#                                       date,
-#                                       units = "hours") %>%  #calculate time step per ID
-#                           as.numeric())
-#   ) %>%
-#   bind_rows()
-#
-#
-#   ggplot(dat) +
-#   geom_point(aes(date, dt)) +
-#   geom_hline(aes(yintercept = median(dt, na.rm = T)), color = "red", size = 1) +
-#   theme_bw() +
-#   facet_wrap(~ id, scales = "free")
-#
-# median(dat$dt, na.rm = TRUE)  #0.88 hrs
-# dat %>%
-#   group_by(id) %>%
-#   summarize(median.dt = median(dt, na.rm = TRUE))
-# let's round and say that typical time step across all IDs is 1 hr
 
 
 # Viz histogram of smallest location SEs
-hist(dat$SE)  #units are in km; vast majority (99.6%) under 2 km
+hist(dat$SE)  #units are in km; vast majority (97%) under 1 km
 
 
 # Split data into list by ID
@@ -69,7 +46,7 @@ dat2 <- dat %>%
 
 
 
-### Run dBBMM model ###
+#### Run dBBMM model ####
 
 # Create 'move' object
 dat.list <- vector("list", length(dat2))  #to store dBBMM results
@@ -87,19 +64,6 @@ for (i in 1:length(dat.list)) {
   # Conditionally define extent; necessary for turtles that don't migrate
   x.ext <- diff(dat.mov@bbox[1,])
   rast.ext <- ifelse(x.ext < 100, 3, 0.3)
-
-
-  ## Remove variance from segments w/ large time gaps to prevent errors when running dBBMM model
-
-  # calculate the dynamic brownian motion variance of the gappy track
-  # tic()
-  # dbbv <- brownian.motion.variance.dyn(dat.mov, location.error = dat2[[i]]$SE, window.size = (4*7)+1,
-  #                                      margin = 9)
-  # toc()
-
-  # ignore all variance values when time interval is > 24 hrs
-  # dbbv@interest[unlist(timeLag(dat.mov, "hours")) > 24] <- FALSE
-
 
 
   ## Run dBBMM (this will take a little while to run)
@@ -128,11 +92,11 @@ for (i in 1:length(dat.list)) {
 # Quick plot of UDs at defined kernel volume (in raster form)
 ud95 <- getVolumeUD(dat.list[[1]])
 ud95[ud95 > 0.95] <- NA
-plot(ud95, main="UD95")
+plot(ud95, main = paste("ID", names(dat2)[[1]], ": 95% UD"))
 
 ud50 <- getVolumeUD(dat.list[[1]])
 ud50[ud50 > 0.50] <- NA
-plot(ud50, main="UD50")
+plot(ud50, main = paste("ID", names(dat2)[[1]], ": 50% UD"))
 
 
 names(contours) <- names(dat2)
@@ -141,7 +105,8 @@ contours <- map2(.x = contours, .y = names(contours),
                  .f = ~{.x %>%
                      mutate(id = .y)})  #add ID name
 
-contours2 <- do.call(rbind, contours)
+contours2 <- do.call(rbind, contours) %>%
+  rename(UD.level = level)
 
 
 
@@ -149,55 +114,76 @@ contours2 <- do.call(rbind, contours)
 
 ## Let's viz the results
 
+brazil<- ne_countries(scale = 50, country = "Brazil", returnclass = 'sf') %>%
+  st_transform(crs = "+proj=merc +lon_0=0 +datum=WGS84 +units=km +no_defs")
+
 ggplot() +
-  geom_sf(data = contours2, aes(color = level), fill = "transparent", size = 0.5) +
+  geom_sf(data = brazil) +
+  geom_sf(data = contours2, aes(color = UD.level), fill = "transparent", size = 0.5) +
   scale_color_met_d('Egypt') +
   theme_bw() +
-  facet_wrap(~ level, nrow = 2)
+  facet_wrap(~ UD.level, nrow = 2) +
+  coord_sf(xlim = c(min(dat$x) - 50, max(dat$x) + 50),
+           ylim = c(min(dat$y) - 50, max(dat$y) + 50))
 
 ggplot() +
-  geom_sf(data = contours2, aes(color = level), fill = "transparent", size = 0.5) +
+  geom_sf(data = brazil) +
+  geom_sf(data = contours2, aes(color = UD.level), fill = "transparent", size = 0.5) +
   scale_color_met_d('Egypt') +
   theme_bw() +
-  facet_wrap(~ id)
+  facet_wrap(~ id) +
+  coord_sf(xlim = c(min(dat$x) - 50, max(dat$x) + 50),
+           ylim = c(min(dat$y) - 50, max(dat$y) + 50))
 
 
-# Highlight a few of the different IDs
 
-#205540
-ggplot() +
-  geom_path(data = dat2[['205540']], aes(x, y), size = 0.5, alpha = 0.5) +
-  geom_sf(data = contours2 %>%
-            filter(id == 205540), aes(color = level), fill = "transparent", size = 0.5) +
-  scale_color_met_d('Egypt') +
-  labs(title = 'ID 205540') +
-  theme_bw()
 
-#205542
-ggplot() +
-  geom_path(data = dat2[['205542']], aes(x, y), size = 0.5, alpha = 0.25) +
-  geom_sf(data = contours2 %>%
-            filter(id == 205542), aes(color = level), fill = "transparent", size = 0.5) +
-  scale_color_met_d('Egypt') +
-  labs(title = 'ID 205542') +
-  theme_bw()
+
+#### Highlight IDs individually ####
 
 #205537
 ggplot() +
-  geom_path(data = dat2[['205537']], aes(x, y), size = 0.5, alpha = 0.5) +
+  geom_path(data = dat2[['205537']], aes(x, y), size = 0.75, alpha = 0.5) +
   geom_sf(data = contours2 %>%
-            filter(id == 205537), aes(color = level), fill = "transparent", size = 0.5) +
+            filter(id == 205537), aes(color = UD.level), fill = "transparent", size = 0.5) +
   scale_color_met_d('Egypt') +
   labs(title = 'ID 205537') +
   theme_bw()
 
-#226073
+#205540
 ggplot() +
-  geom_path(data = dat2[['226073']], aes(x, y), size = 0.5, alpha = 0.5) +
+  geom_path(data = dat2[['205540']], aes(x, y), size = 0.75, alpha = 0.5) +
   geom_sf(data = contours2 %>%
-            filter(id == 226073), aes(color = level), fill = "transparent", size = 0.5) +
+            filter(id == 205540), aes(color = UD.level), fill = "transparent", size = 0.5) +
   scale_color_met_d('Egypt') +
-  labs(title = 'ID 226073') +
+  labs(title = 'ID 205540') +
+  theme_bw()
+
+#205544
+ggplot() +
+  geom_path(data = dat2[['205544']], aes(x, y), size = 0.75, alpha = 0.25) +
+  geom_sf(data = contours2 %>%
+            filter(id == 205544), aes(color = UD.level), fill = "transparent", size = 0.5) +
+  scale_color_met_d('Egypt') +
+  labs(title = 'ID 205544') +
+  theme_bw()
+
+#226072
+ggplot() +
+  geom_path(data = dat2[['226072']], aes(x, y), size = 0.5, alpha = 0.5) +
+  geom_sf(data = contours2 %>%
+            filter(id == 226072), aes(color = UD.level), fill = "transparent", size = 0.5) +
+  scale_color_met_d('Egypt') +
+  labs(title = 'ID 226072') +
+  theme_bw()
+
+#41614
+ggplot() +
+  geom_path(data = dat2[['41614']], aes(x, y), size = 0.5, alpha = 0.5) +
+  geom_sf(data = contours2 %>%
+            filter(id == 41614), aes(color = UD.level), fill = "transparent", size = 0.5) +
+  scale_color_met_d('Egypt') +
+  labs(title = 'ID 41614') +
   theme_bw()
 
 
@@ -205,8 +191,20 @@ ggplot() +
 
 # Plot all tracks w/ UD contours
 ggplot() +
+  geom_sf(data = brazil) +
   geom_path(data = dat, aes(x, y, color = factor(id), group = id), size = 0.5, alpha = 0.5) +
   geom_sf(data = contours2, fill = "transparent", size = 0.75, color = 'black') +
   scale_color_viridis_d(option = 'turbo') +
   theme_bw() +
-  facet_wrap(~ level, nrow = 2)
+  facet_wrap(~ UD.level, nrow = 2) +
+  coord_sf(xlim = c(min(dat$x) - 50, max(dat$x) + 50),
+           ylim = c(min(dat$y) - 50, max(dat$y) + 50))
+
+
+
+
+
+
+#### Export datasets for easy loading ####
+
+save(contours2, file = "Processed_data/dBBMM_fits.RData")

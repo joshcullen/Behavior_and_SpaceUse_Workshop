@@ -4,3 +4,12 @@
   font-family: 'Rajdhani';
   src: url('fonts/Rajdhani-Regular.ttf') format("trutype");
 }
+
+@font-face {
+  font-family: 'Exo';
+  src: url('fonts/Exo-Regular.ttf') format("trutype");
+}
+
+
+$font-family-serif: Rajdhani,"Exo", Georgia, 'Times New Roman', Times, serif;
+

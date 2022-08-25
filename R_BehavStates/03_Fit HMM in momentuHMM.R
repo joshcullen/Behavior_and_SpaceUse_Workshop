@@ -19,9 +19,9 @@ library(plotly)
 library(rerddapXtracto)
 
 
-### Load data ###
+#### Load data ####
 
-dat <- read.csv('Processed_data/SSM_mp6hr_FDN Cmydas tracks.csv')
+dat <- read.csv('Processed_data/SSM_mp8hr_FDN Cmydas tracks.csv')
 
 glimpse(dat)
 summary(dat)
@@ -29,7 +29,7 @@ summary(dat)
 
 
 
-### Wrangle data for analysis using {momentuHMM} ###
+#### Wrangle data for analysis using {momentuHMM} ####
 
 # Convert all 'Date' to datetime format and change name of 'id' column
 dat <- dat %>%
@@ -49,7 +49,7 @@ ggplot(dat2, aes(date, step)) +
   geom_line() +
   theme_bw() +
   facet_wrap(~ID, scales = "free_x")
-#for 2 states, initial mean values probably around 1 and 15 km whereas SD probably around 0.5 and 5
+#for 2 states, initial mean values probably around 1 and 30 km whereas SD probably around 0.5 and 5
 
 
 # Plot time series and distributions of turning angles
@@ -67,7 +67,7 @@ ggplot(dat2, aes(date, angle)) +
 
 
 
-## Extract sea surface temperature
+#### Extract sea surface temperature ####
 
 #Available at url: https://coastwatch.pfeg.noaa.gov/erddap/griddap/jplMURSST41.html
 
@@ -81,12 +81,12 @@ tic()
 sst <- rxtracto(sstInfo, parameter = 'analysed_sst',
                 xcoord = xpos, ycoord = ypos, tcoord = tpos,
                 xlen = 0.2, ylen = 0.2, progress_bar = TRUE)
-toc()  #takes 15.5 min to run
+toc()  #takes 11 min to run
 
 plotTrack(sst, xpos, ypos, tpos, plotColor = 'thermal')
 
 
-# Add SST, year-day (yday), and hour to dataset
+# Add SST, year-day (yday), and hour to dataset as potential covariates
 
 dat2$sst <- sst$`mean analysed_sst`
 dat2$yday <- yday(dat2$date)
@@ -103,10 +103,10 @@ plot(dat2$yday, dat2$sst)
 
 
 
-### Fit HMM for 2 states using step lengths and turning angles ###
+#### Fit HMM for 2 states using step lengths and turning angles ####
 
 # initial step distribution natural scale parameters
-stepPar0 <- c(1, 15, 0.5, 5) # (mu_1, mu_2, sd_1, sd_2)
+stepPar0 <- c(1, 30, 0.5, 5) # (mu_1, mu_2, sd_1, sd_2)
 
 # initial angle distribution natural scale parameters
 anglePar0 <- c(0, 0, 0.2, 0.99) # (mean_1, mean_2, concentration_1, concentration_2)
@@ -122,17 +122,17 @@ fit_hmm_2states <- fitHMM(data = dat2,
                           estAngleMean = list(angle=TRUE),
                           stateNames = c('Encamped', 'Migratory'),
                           retryFits = 10)  #may be necessary to run more fits
-toc()  #took 2 min to run
+toc()  #took 30 sec to run
 
 fit_hmm_2states
 plot(fit_hmm_2states)
-plotPR(fit_hmm_2states, ncores = 5)  #plot of pseudo-residuals show that there are likely some problems; potentially a daily acf pattern for the 6 hr time step data
+plotPR(fit_hmm_2states, ncores = 5)  #plot of pseudo-residuals show that there are likely some problems
 
 
 
 
 
-### Fit HMM for 3 states using step lengths and turning angles ###
+#### Fit HMM for 3 states using step lengths and turning angles ####
 # There might be a difference between 'encamped/breeding' behavior and 'foraging' behavior after migration
 
 # Step lengths
@@ -167,26 +167,26 @@ fit_hmm_3states <- fitHMM(data = dat2,
                           estAngleMean = list(angle=TRUE),
                           stateNames = c('Breeding', 'Foraging', 'Migratory'),
                           retryFits = 10)
-toc()  #took 8 min to run
+toc()  #took 2 min to run
 
 fit_hmm_3states
 
-plot(fit_hmm_3states)  #model can't really differentiate between the breeding and foraging ground movements
-plotStates(fit_hmm_3states)  #given how quickly the states fluctuate between Encamped and ARS, there likely is only 1 slow state present
-timeInStates(fit_hmm_3states)  #primarily in Breeding or Foraging state; only 5% Migratory
-plotPR(fit_hmm_3states, ncores = 5)  #looks about the same as before
+plot(fit_hmm_3states)  #model can't really differentiate between the breeding and foraging ground movements; but does appear to detect a 3rd state
+plotStates(fit_hmm_3states)  #possible that 1st state is 'Encamped' and 2nd state is 'ARS'
+timeInStates(fit_hmm_3states)  #primarily in Encamped/Breeding or Foraging state; only 3% Migratory
+plotPR(fit_hmm_3states, ncores = 5)  #ACF and QQ plot for SL looks better
 
 
 
 
 
-### Fit HMM for 2 states including covariates ###
+#### Fit HMM for 2 states including covariates ####
 
 
 # formula for transition probabilities
 formula <- ~ sst * cosinor(hr, period = 24)
 
-# initial parameters (obtained from nested model m1)
+# initial parameters (obtained from nested model first model)
 Par0_covar <- getPar0(model = fit_hmm_2states, formula = formula)
 
 
@@ -201,15 +201,14 @@ fit_hmm_2states_covar1 <- fitHMM(data = dat2,
                                 estAngleMean = list(angle=TRUE),
                                 stateNames = c('Encamped', 'Migratory'),
                                 retryFits = 10)
-toc()  #took 4.5 min to run
+toc()  #took 50 sec to run
 
 fit_hmm_2states_covar1
 plot(fit_hmm_2states_covar1, plotCI = TRUE, plotStationary = TRUE)  #no noticeable impact of including SST, although slight effect of yday; stationary states show some patterns
 plotStates(fit_hmm_2states_covar1)
 stationary(fit_hmm_2states_covar1)  #gets stationary state probs plotted above per obs
-# plotStationary(fit_hmm_2states_covar1, plotCI = TRUE)
-timeInStates(fit_hmm_2states_covar1)  #95% encamped; 5% migratory
-plotPR(fit_hmm_2states_covar1, ncores = 5)  #looks about the same as before, despite including term for hr of day
+timeInStates(fit_hmm_2states_covar1)  #93% encamped; 7% migratory
+plotPR(fit_hmm_2states_covar1, ncores = 5)  #looks about the same as earlier 2-state model
 
 
 
@@ -221,10 +220,10 @@ plotPR(fit_hmm_2states_covar1, ncores = 5)  #looks about the same as before, des
 ### Also include effect of covars on step lengths and turning angles
 
 # formulas for parameters of state-dependent distributions
-DM <- list(step = list(mean = formula,
-                       sd = formula),
-           angle = list(mean = formula,
-                        concentration = formula))
+DM <- list(step = list(mean = ~ sst,
+                       sd = ~ sst),
+           angle = list(mean = ~ sst,
+                        concentration = ~ sst))
 
 # initial parameters (obtained from nested model; i.e., previous model)
 Par0_covar2 <- getPar0(model = fit_hmm_2states_covar1, formula = formula, DM = DM)
@@ -242,10 +241,10 @@ fit_hmm_2states_covar2 <- fitHMM(data = dat2,
                                  estAngleMean = list(angle=TRUE),
                                  stateNames = c('Encamped', 'Migratory'),
                                  retryFits = 10)
-toc()  #took 17 min to run
+toc()  #took 2 min to run
 
 fit_hmm_2states_covar2
-plot(fit_hmm_2states_covar2, plotCI = TRUE, plotStationary = TRUE)  #affects of covariates are greater on SL and TA vs TPM; stationary states show some patterns
+plot(fit_hmm_2states_covar2, plotCI = TRUE, plotStationary = TRUE)  #affects of covariates are greater on SL and TA vs TPM; stationary states show some patterns; appears to perform worse
 plotStates(fit_hmm_2states_covar2)
 stationary(fit_hmm_2states_covar2)  #gets stationary state probs plotted above per obs
 # plotStationary(fit_hmm_2states_covar2, plotCI = TRUE)
@@ -255,17 +254,56 @@ plotPR(fit_hmm_2states_covar2, ncores = 5)  #looks about the same as before
 
 
 
+
+
+
+#### Fit HMM for 3 states including covariates ####
+
+
+# formula for transition probabilities
+formula <- ~ sst * cosinor(hr, period = 24)
+
+# initial parameters (obtained from nested model first model)
+Par0_covar3 <- getPar0(model = fit_hmm_3states, formula = formula)
+
+
+set.seed(123)
+tic()
+fit_hmm_3states_covar1 <- fitHMM(data = dat2,
+                                 nbStates = 3,
+                                 dist = list(step = "gamma", angle = "wrpcauchy"),
+                                 Par0 = Par0_covar3$Par,
+                                 beta0 = Par0_covar3$beta,
+                                 formula = formula,
+                                 estAngleMean = list(angle=TRUE),
+                                 stateNames = c('Breeding', 'Foraging', 'Migratory'),
+                                 retryFits = 10)
+toc()  #took 2 min to run
+
+fit_hmm_3states_covar1
+plot(fit_hmm_3states_covar1, plotCI = TRUE, plotStationary = TRUE)  #seems to also perform worse
+plotStates(fit_hmm_3states_covar1)
+stationary(fit_hmm_3states_covar1)  #gets stationary state probs plotted above per obs
+timeInStates(fit_hmm_3states_covar1)  #primarily Breeding or Foraging; 4% migratory
+plotPR(fit_hmm_3states_covar1, ncores = 5)  #looks like best model diagnostics so far
+
+
+
+
+
 ### Compare among models ###
 
-AIC(fit_hmm_2states, fit_hmm_3states, fit_hmm_2states_covar1, fit_hmm_2states_covar2)
-AICweights(fit_hmm_2states, fit_hmm_3states, fit_hmm_2states_covar1, fit_hmm_2states_covar2)
+AIC(fit_hmm_2states, fit_hmm_3states, fit_hmm_2states_covar1, fit_hmm_2states_covar2,
+    fit_hmm_3states_covar1)
+AICweights(fit_hmm_2states, fit_hmm_3states, fit_hmm_2states_covar1, fit_hmm_2states_covar2,
+           fit_hmm_3states_covar1)
+# of these models, AIC suggests that the most complicated one is best; but not necessarily the case if not interpretable
 
 
 
 
 
-
-### Fit HMM for 3 states that evaluates SL, TA, and NSD
+#### Fit HMM for 3 states that evaluates SL, TA, and NSD ####
 
 # Calculate displacement manually
 calc_disp <- function(data, x, y) {
@@ -280,23 +318,16 @@ dat3 <- dat2 %>%
   purrr::map(., calc_disp, x, y) %>%
   bind_rows()
 
-# Calculate the difference in displacement between subsequent steps
-dat3 <- dat3 %>%
-  split(.$ID) %>%
-  purrr::map(., ~{.x %>%
-      mutate(disp_diff = c(diff(disp), NA))
-  }) %>%
-  bind_rows()
 
 
-## Viz displacement and difference in displacement over time per ID
+## Viz displacement and step length over time per ID
 
 ggplot(dat3, aes(date, disp)) +
   geom_path(aes(group = ID)) +
   theme_bw() +
   facet_wrap(~ID, scales = "free")
 
-ggplot(dat3, aes(date, disp_diff)) +
+ggplot(dat3, aes(date, step)) +
   geom_path(aes(group = ID)) +
   theme_bw() +
   facet_wrap(~ID, scales = "free")
@@ -305,8 +336,8 @@ ggplot(dat3, aes(date, disp_diff)) +
 # Pre-define states to set "good" initial values
 dat3 <- dat3 %>%
   mutate(state = case_when(disp < 6 ~ 'Breeding',
-                           disp_diff > 2 ~ 'Migratory',
-                           disp > 6 & disp_diff < 2 ~ 'Foraging'))
+                           step > 4 ~ 'Migratory',
+                           disp > 6 & step < 4 ~ 'Foraging'))
 
 
 ggplot(dat3, aes(date, disp)) +
@@ -336,36 +367,10 @@ dat3 %>%
             sd.disp = sd(disp, na.rm = T))
 
 
-# Step lengths
-ggplot(dat3, aes(date, step)) +
-  geom_line() +
-  theme_bw() +
-  facet_wrap(~ID, scales = "free_x")
-#try means at 1, 1, and 20 km; SDs at 0.5, 1, and 5 km
-
-# Turning angles
-ggplot(dat3, aes(date, angle)) +
-  geom_line() +
-  theme_bw() +
-  facet_wrap(~ID, scales = "free_x")
-#try means at 0 rad; concentrations at 0.1, 0.1, 0.99
-
-# Displacement
-ggplot(dat3, aes(disp)) +
-  geom_histogram(binwidth = 50) +
-  theme_bw()
-
-ggplot(dat3, aes(date, disp)) +
-  geom_line() +
-  theme_bw() +
-  facet_wrap(~ID, scales = "free_x")
-#try means at 0, 500, and 250 km; SDs at 2, 200, and 100 km
-
-
 
 
 # initial step distribution natural scale parameters
-stepPar0 <- c(0.5, 1.5, 15, 1, 1.5, 8) # (mu_1, mu_2, mu_3, sd_1, sd_2, sd_3)
+stepPar0 <- c(0.5, 1.5, 15, 1, 1.5, 12) # (mu_1, mu_2, mu_3, sd_1, sd_2, sd_3)
 
 # initial angle distribution natural scale parameters
 anglePar0 <- c(0, 0, 0, 0.1, 0.1, 0.99) # (mean_1, mean_2, mean_3, concentration_1, concentration_2, concentration_3)
@@ -374,86 +379,78 @@ anglePar0 <- c(0, 0, 0, 0.1, 0.1, 0.99) # (mean_1, mean_2, mean_3, concentration
 whichzero <- which(dat3$disp == 0)
 propzero <- length(whichzero)/nrow(dat3)
 zeromass0 <- c(propzero, 1e-9, 1e-9)        #for zero distances by state
-dispPar0 <- c(1, 570, 450, 1, 213, 250, zeromass0) # (mu_1, mu_2, mu_3, sd_1, sd_2, sd_3, proportion of zeroes likely present per state)
+dispPar0 <- c(1, 470, 400, 1, 150, 250, zeromass0) # (mu_1, mu_2, mu_3, sd_1, sd_2, sd_3, proportion of zeroes likely present per state)
 
 
 
 set.seed(123)
 tic()
-fit_hmm_3states_3covars <- fitHMM(data = dat3,
+fit_hmm_3states_3vars <- fitHMM(data = dat3,
                                   nbStates = 3,
                                   dist = list(step = "gamma", angle = "wrpcauchy", disp = "gamma"),
                                   Par0 = list(step = stepPar0, angle = anglePar0, disp = dispPar0),
                                   formula = ~ 1,
                                   estAngleMean = list(angle=TRUE),
-                                  stateNames = c('Breeding','Foraging','Migratory'))
-toc()  #took 2 min to run
+                                  stateNames = c('Breeding','Foraging','Migratory'),
+                                  retryFits = 10)
+toc()  #took 3.5 min to run
 
-fit_hmm_3states_3covars
+fit_hmm_3states_3vars
 
-plot(fit_hmm_3states_3covars)
-plotStates(fit_hmm_3states_3covars)  #given how quickly the states fluctuate between Encamped and ARS, there likely is only 1 slow state present
-timeInStates(fit_hmm_3states_3covars)  #66% breeding, 29% foraging, 5% migratory
-plotPR(fit_hmm_3states_3covars, ncores = 5)  #looks about the same as before
-
-
-
+plot(fit_hmm_3states_3vars)
+plotStates(fit_hmm_3states_3vars)  #given how quickly the states fluctuate between Encamped and ARS, there likely is only 1 slow state present
+timeInStates(fit_hmm_3states_3vars)  #72% breeding, 25% foraging, 3% migratory
+plotPR(fit_hmm_3states_3vars, ncores = 5)  #look decent, but could be improved
 
 
 
 
-### Fit HMM for 3 states that evaluates SL, TA, and NSD w/ covariates
 
 
-# formulas for parameters of state-dependent distributions
-DM <- list(step = list(mean = formula,
-                       sd = formula),
-           angle = list(mean = formula,
-                        concentration = formula),
-           disp = list(mean = formula,
-                       sd = formula,
-                       zeromass = ~1))
+
+#### Fit HMM for 3 states that evaluates SL, TA, and NSD w/ covariates ####
+
 
 # initial parameters (obtained from nested model; i.e., previous model)
-Par0_covar3 <- getPar0(model = fit_hmm_3states_3covars, formula = formula, DM = DM)
+Par0_covar4 <- getPar0(model = fit_hmm_3states_3vars, formula = formula)
 
 
 set.seed(123)
 tic()
-fit_hmm_3states_3covars2 <- fitHMM(data = dat3,
+fit_hmm_3states_3vars2 <- fitHMM(data = dat3,
                                  nbStates = 3,
                                  dist = list(step = "gamma", angle = "wrpcauchy", disp = "gamma"),
-                                 Par0 = Par0_covar3$Par,
-                                 beta0 = Par0_covar3$beta,
+                                 Par0 = Par0_covar4$Par,
+                                 beta0 = Par0_covar4$beta,
                                  formula = formula,
-                                 DM = DM,
+                                 # DM = DM,
                                  estAngleMean = list(angle=TRUE),
-                                 stateNames = c('Breeding','Foraging','Migratory'))
-toc()  #took 31 min to run
+                                 stateNames = c('Breeding','Foraging','Migratory'),
+                                 retryFits = 10)
+toc()  #took 8 min to run
 
-fit_hmm_3states_3covars2
-plot(fit_hmm_3states_3covars2, plotCI = TRUE, plotStationary = TRUE)  #affects of covariates are greater on SL and TA vs TPM; stationary states show some patterns
-plotStates(fit_hmm_3states_3covars2)
-stationary(fit_hmm_3states_3covars2)  #gets stationary state probs plotted above per obs
-# plotStationary(fit_hmm_3states_3covars2, plotCI = TRUE)
-timeInStates(fit_hmm_3states_3covars2)
-plotPR(fit_hmm_3states_3covars2, ncores = 5)  #looks about the same as before
-
-
-
-
-
-### Compare between models ###
-
-AIC(fit_hmm_3states_3covars, fit_hmm_3states_3covars2)
-AICweights(fit_hmm_3states_3covars, fit_hmm_3states_3covars2)
-#despite AIC heavily favoring model w/ covariates, it doesn't appear to be very informative; probably better to stick w/ model w/o covariates
+fit_hmm_3states_3vars2
+plot(fit_hmm_3states_3vars2, plotCI = TRUE, plotStationary = TRUE)  #affects of covariates are greater on SL and TA vs TPM; stationary states show some patterns
+plotStates(fit_hmm_3states_3vars2)
+stationary(fit_hmm_3states_3vars2)  #gets stationary state probs plotted above per obs
+timeInStates(fit_hmm_3states_3vars2)
+plotPR(fit_hmm_3states_3vars2, ncores = 5)  #looks about the same as before
 
 
 
 
-### Export datasets for easy loading
+
+#### Compare between models ####
+
+AIC(fit_hmm_3states_3vars, fit_hmm_3states_3vars2)
+AICweights(fit_hmm_3states_3vars, fit_hmm_3states_3vars2)
+#AIC actually appears to favor model w/o covariates
+
+
+
+
+#### Export datasets for easy loading ####
 
 save(dat2, dat3, fit_hmm_2states, fit_hmm_3states, fit_hmm_2states_covar1, fit_hmm_2states_covar2,
-     fit_hmm_3states_3covars, fit_hmm_3states_3covars2,
+     fit_hmm_3states_covar1, fit_hmm_3states_3vars, fit_hmm_3states_3vars2,
      file = "Processed_data/HMM_data_and_model_fits.RData")

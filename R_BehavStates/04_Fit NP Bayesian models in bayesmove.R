@@ -22,9 +22,9 @@ library(furrr)
 library(future)
 
 
-### Load data ###
+#### Load data ####
 
-dat <- read.csv('Processed_data/SSM_mp6hr_FDN Cmydas tracks.csv')
+dat <- read.csv('Processed_data/SSM_mp8hr_FDN Cmydas tracks.csv')
 
 glimpse(dat)
 summary(dat)
@@ -32,7 +32,7 @@ summary(dat)
 
 
 
-### Wrangle data for analysis using {bayesmove} ###
+#### Wrangle data for analysis using {bayesmove} ####
 
 # Convert all 'date' to datetime format
 dat <- dat %>%
@@ -44,7 +44,7 @@ head(dat2)
 # calculates step lengths, turning angles, net-squared displacement (NSD), and time step (dt)
 
 
-# Let's double-check that all time-steps are at 6 hrs (21600 s)
+# Let's double-check that all time-steps are at 8 hrs (28800 s)
 table(dat2$dt)  #yes
 
 
@@ -70,7 +70,7 @@ dat2$disp <- sqrt(dat2$NSD)
 
 
 
-### Discretize data streams for models ###
+#### Discretize data streams for models ####
 
 # Viz density plots of each data stream
 ggplot(dat2) +
@@ -83,7 +83,6 @@ ggplot(dat2) +
 
 ggplot(dat2) +
   geom_density(aes(disp), fill = "goldenrod") +
-  # scale_x_continuous(breaks = seq(0, 1000, by = 200)) +
   theme_bw()
 
 
@@ -97,7 +96,7 @@ angle.bin.lims <- seq(from = -pi, to = pi, by = pi/4)  #8 bins
 step.bin.lims <- c(seq(from = 0, to = 5, length = 6), max(dat2$step, na.rm = TRUE))  #6 bins
 
 # displacement (must be positive, but no upper bound)
-disp.bin.lims <- c(seq(from = 0, to = 750, by = 250), max(dat2$disp, na.rm = TRUE))  #4 bins
+disp.bin.lims <- seq(from = 0, to = 800, by = 200)  #4 bins
 
 
 angle.bin.lims
@@ -133,7 +132,7 @@ ggplot(dat.disc) +
 
 
 
-### Fit observation-level mixture model to estimate states ###
+#### Fit observation-level mixture model to estimate states ####
 
 # Only retain columns of discretized data streams
 dat.disc.sub<- dat.disc %>%
@@ -152,7 +151,7 @@ nmaxclust = 7  #number of maximum possible states (clusters) present
 # Run model
 dat.res.obs<- cluster_obs(dat = dat.disc.sub, alpha = alpha, ngibbs = ngibbs, nmaxclust = nmaxclust,
                       nburn = nburn)
-# took 9 min to run
+# took 2.5 min to run
 
 
 # Inspect traceplot of log-likelihood
@@ -168,7 +167,7 @@ colnames(theta)<- 1:ncol(theta)
 theta1<- colMeans(theta)
 theta1
 # theta1<- sort(theta1, decreasing = TRUE)
-cumsum(theta1)  #possibly 4 states present; represents > 90% of all obs
+cumsum(theta1)  #possibly 3 states present; represents > 90% of all obs
 
 
 
@@ -210,7 +209,7 @@ ggplot(behav.res.obs, aes(x = bin.vals, y = prop, fill = as.factor(behav))) +
   scale_fill_manual(values = c(viridis::viridis(4), rep("grey35", 3)), guide = 'none') +
   scale_y_continuous(breaks = c(0.00, 0.50, 1.00)) +
   facet_grid(behav ~ var, scales = "free_x")
-##actually looks like there's 4 states, but that 3 & 4 should be merged and state 5 is a transiting state
+##actually looks like there's 4 states
 
 
 
@@ -218,17 +217,18 @@ ggplot(behav.res.obs, aes(x = bin.vals, y = prop, fill = as.factor(behav))) +
 
 # Using MAP estimate, threshold of 75% assignments from posterior, and most common state
 z.post<- as.data.frame(dat.res.obs$z.posterior)
-z.post$`3` <- z.post[,3] + z.post[,4]  #combine states 3 and 4
-z.post <- z.post[,-c(3:4)]  #remove original states 3 and  4
-z.post <- relocate(z.post, `3`, .after = V2)  #reorder columns for new state 3
-names(z.post) <- 1:ncol(z.post)  #rename columns/states
+# z.post$`3` <- z.post[,3] + z.post[,4]  #combine states 3 and 4
+# z.post <- z.post[,-c(3:4)]  #remove original states 3 and  4
+# z.post <- relocate(z.post, `3`, .after = V2)  #reorder columns for new state 3
+# names(z.post) <- 1:ncol(z.post)  #rename columns/states
 
 z.post2<- t(apply(z.post, 1, function(x) x/sum(x)))  #calculate proportions of samples from posterior distribution assigned to each state
 thresh<- 0.75  #user-defined threshold percentage for classifying a state
 z.post.thresh<- apply(z.post2, 1, function(x) ifelse(max(x) > thresh, which(x > thresh), NA))
 z.post.max<- apply(z.post2, 1, function(x) which.max(x))
-z.map <- ifelse(dat.res.obs$z.MAP == 4, 3,
-                ifelse(dat.res.obs$z.MAP == 5, 4, dat.res.obs$z.MA))
+# z.map <- ifelse(dat.res.obs$z.MAP == 4, 3,
+#                 ifelse(dat.res.obs$z.MAP == 5, 4, dat.res.obs$z.MAP))
+z.map <- dat.res.obs$z.MAP
 
 ## Add states to data frame
 dat.states<- dat.disc %>%
@@ -248,9 +248,9 @@ dat.states$z.post.max<- ifelse(dat.states$z.post.max > n.states, NA, dat.states$
 # Assign names to states
 dat.states2<- dat.states %>%
   mutate(across(c('z.map','z.post.thresh','z.post.max'),
-                ~case_when(. == 1 ~ "Breeding_ARS",
+                ~case_when(. == 1 ~ "Breeding_Encamped",
                            . == 2 ~ "Foraging",
-                           . == 3 ~ "Breeding_Encamped",
+                           . == 3 ~ "Breeding_ARS",
                            . == 4 ~ "Migratory",
                            is.na(.) ~ "Unclassified")
   )) %>%
@@ -378,7 +378,7 @@ dat.states2 %>%
 
 
 
-### Fit segment-level mixed-membership model to estimate states ###
+#### Fit segment-level mixed-membership model to estimate states ####
 
 # Convert data to list by ID
 dat.list <- dat.disc %>%
@@ -404,43 +404,43 @@ future::plan(multisession, workers = availableCores() - 2)  #run MCMC chains in 
 dat.res.seg1<- segment_behavior(data = dat.list.sub, ngibbs = ngibbs, nbins = nbins,
                            alpha = alpha)
 future::plan(future::sequential)  #return to single core
-# takes 1.5 min to run
+# takes 27 sec to run
 
 
-
-# Trace-plots for the number of breakpoints per ID
-traceplot(data = dat.res.seg1, type = "nbrks")
 
 # Trace-plots for the log marginal likelihood (LML) per ID
 traceplot(data = dat.res.seg1, type = "LML")  #appears to have converged for each track
 
+# Trace-plots for the number of breakpoints per ID
+traceplot(data = dat.res.seg1, type = "nbrks")
 
 
 
 
 
-# Run the segmentation model (semi-supervised via pre-specification of breakpoints)
 
-#Calculate the difference in displacement between subsequent steps
-dat.list <- dat.list %>%
-  purrr::map(., ~{.x %>%
-      mutate(disp_diff = c(diff(disp), NA))
-  })
+#### Run the segmentation model (semi-supervised via pre-specification of breakpoints) ####
 
 #Pre-define these migratory phases
 dat.list <- dat.list %>%
   map(., ~{.x %>%
       mutate(phase = case_when(disp < 6 ~ 1,
-                               disp_diff > 2 ~ 2,
-                               disp > 6 & disp_diff < 2 ~ 3)
+                               step > 4 ~ 2,
+                               disp > 6 & step < 4 ~ 3)
       )
   })
+
+ggplot(bind_rows(dat.list), aes(date, disp)) +
+  geom_path(aes(group = id, color = factor(phase))) +
+  theme_bw() +
+  facet_wrap(~id, scales = "free_x")
 
 
 #Find breakpoints based on 'phase'
 breaks<- map(dat.list, ~find_breaks(dat = ., ind = "phase"))
 breaks  #since some IDs have 0 estimated breaks and model needs at least 1 for all IDs, provide 1 fake brkpt
 
+#All IDs need at least 1 proposed breakpoint; just create dummy location
 ind <- which(lengths(breaks) == 0)
 breaks[ind] <- 1
 breaks
@@ -458,15 +458,15 @@ future::plan(multisession, workers = availableCores() - 2)  #run MCMC chains in 
 dat.res.seg2<- segment_behavior(data = dat.list.sub, ngibbs = ngibbs, nbins = nbins,
                                 alpha = alpha, breakpt = breaks)
 future::plan(future::sequential)  #return to single core
-# takes 3 min to run
+# takes 26 sec to run
 
 
-
-# Trace-plots for the number of breakpoints per ID
-traceplot(data = dat.res.seg2, type = "nbrks")
 
 # Trace-plots for the log marginal likelihood (LML) per ID
 traceplot(data = dat.res.seg2, type = "LML")  #appears to have converged for each track
+
+# Trace-plots for the number of breakpoints per ID
+traceplot(data = dat.res.seg2, type = "nbrks")
 
 
 
@@ -514,7 +514,7 @@ ggplot(dat2) +
 step.bin.lims2 <- c(seq(from = 0, to = 5, length = 6), 10, max(dat2$step, na.rm = TRUE))  #7 bins
 
 # displacement (must be positive, but no upper bound)
-disp.bin.lims2 <- seq(from = 0, to = 1050, by = 150)  #7 bins
+disp.bin.lims2 <- c(seq(from = 0, to = 600, by = 150), max(dat2$disp, na.rm = TRUE))  #7 bins
 
 step.bin.lims2
 disp.bin.lims2
@@ -554,7 +554,7 @@ set.seed(123)
 
 alpha<- 1  # hyperparameter for prior (Dirichlet) distribution
 ngibbs<- 50000  # number of iterations for Gibbs sampler
-nbins<- c(7,8,7)  # define number of bins per data stream (in order from dat.list.sub)
+nbins<- c(7,8,5)  # define number of bins per data stream (in order from dat.list.sub)
 
 progressr::handlers(progressr::handler_progress(clear = FALSE))  #to initialize progress bar
 future::plan(multisession, workers = availableCores() - 2)  #run MCMC chains in parallel
@@ -562,15 +562,15 @@ future::plan(multisession, workers = availableCores() - 2)  #run MCMC chains in 
 dat.res.seg3<- segment_behavior(data = dat.list.sub2, ngibbs = ngibbs, nbins = nbins,
                                 alpha = alpha)
 future::plan(future::sequential)  #return to single core
-# takes 2 min to run
+# takes 30 sec to run
 
 
-
-# Trace-plots for the number of breakpoints per ID
-traceplot(data = dat.res.seg3, type = "nbrks")
 
 # Trace-plots for the log marginal likelihood (LML) per ID
 traceplot(data = dat.res.seg3, type = "LML")  #appears to have converged for each track
+
+# Trace-plots for the number of breakpoints per ID
+traceplot(data = dat.res.seg3, type = "nbrks")
 
 
 # Determine MAP for selecting breakpoints
@@ -610,13 +610,13 @@ head(dat.seg)
 
 
 
-# Cluster segments into behavioral states
+#### Cluster segments into behavioral states ####
 
 #Select only id, tseg, and discretized data streams
 dat.seg2<- dat.seg[,c("id","tseg","SL","TA","Disp")]
 
 #Summarize observations by track segment
-nbins<- c(7,8,7)
+nbins<- c(7,8,5)
 obs<- summarize_tsegs(dat = dat.seg2, nbins = nbins)
 obs
 
@@ -637,7 +637,7 @@ alpha<- 0.1
 dat.res.segclust<- cluster_segments(dat = obs, gamma1 = gamma1, alpha = alpha,
                                     ngibbs = ngibbs, nmaxclust = nmaxclust,
                                     nburn = nburn, ndata.types = ndata.types)
-# takes 1.5 min to run
+# takes 19 sec to run
 
 
 # Check traceplot of log likelihood
@@ -670,7 +670,7 @@ ggplot(theta.estim_df, aes(behavior, prop)) +
 (theta.means<- round(colMeans(theta.estim), digits = 3))
 
 #Calculate cumulative sum
-cumsum(theta.means)  #probably 4 or 5 states
+cumsum(theta.means)  #probably 4 states
 
 
 
@@ -716,9 +716,9 @@ ggplot(behav.res.seg, aes(x = bin.vals, y = prop, fill = as.factor(behav))) +
 
 #Reformat proportion estimates for all track segments
 theta.estim.long<- expand_behavior(dat = dat.seg, theta.estim = theta.estim, obs = obs, nbehav = 5,
-                                   behav.names = c("Migratory", "Breeding_Encamped", "Foraging1",
-                                                   "Foraging2", "Foraging3"),
-                                   behav.order = c(2,1,3:5))
+                                   behav.names = c("Breeding_Encamped", "Migratory", "Foraging1",
+                                                   "Foraging2", "Breeding_ARS"),
+                                   behav.order = c(1,5,3:4,2))
 
 #Plot results
 ggplot(theta.estim.long) +
@@ -737,7 +737,7 @@ ggplot(theta.estim.long) +
 
 
 
-## Assign states to segments and map
+#### Assign states to segments and map ####
 
 # Convert segmented dataset into list
 dat.seg.list<- df_to_list(dat = dat.seg, ind = "id")
@@ -793,7 +793,7 @@ ggplot() +
         legend.title = element_text(size = 14))
 
 dat.out2 <- dat.out %>%
-  mutate(Foraging = Foraging1 + Foraging2 + Foraging3)
+  mutate(Foraging = Foraging1 + Foraging2)
 
 
 ggplot() +
@@ -819,7 +819,7 @@ ggplot() +
 
 
 
-### Export datasets for easy loading
+#### Export datasets for easy loading ####
 
 save(behav.res.seg, theta.estim.long, dat.out2, dat.res.seg3, dat.res.segclust,
      file = "Processed_data/bayesmove_model_fits.RData")

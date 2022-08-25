@@ -11,9 +11,9 @@ library(rnaturalearth)
 library(sf)
 
 
-### Load data ###
+#### Load data ####
 
-dat <- read.csv("Raw_data/FDN Cmydas tracks.csv")
+dat <- read.csv("Raw_data/FDN Cmydas tracks_subset.csv")
 
 # Explore data summaries
 glimpse(dat)
@@ -29,7 +29,7 @@ table(dat$Quality, useNA = "ifany")
 
 
 
-### Filter data based on 'Quality' ###
+#### Filter data based on 'Quality' ####
 
 dat2 <- dat %>%
   filter(Quality != "Z" & !is.na(Quality))
@@ -38,7 +38,7 @@ table(dat2$Quality, useNA = "ifany")  #Quality looks good now
 
 
 
-### Convert 'Date' to datetime format ###
+#### Convert 'Date' to datetime format ####
 
 dat2$Date[1:10]  #see what current format looks like
 
@@ -49,9 +49,9 @@ dat2$Date[1:10]  #inspect modified format
 
 
 
-### Visualize tracks to determine if any anomalies ###
+#### Visualize tracks to determine if any anomalies ####
 
-#Change Ptt to character so treated as discrete quantities
+# Change Ptt to character so treated as discrete quantities
 dat2$Ptt <- as.character(dat2$Ptt)
 
 ggplot(dat2, aes(Longitude, Latitude, color = Ptt)) +
@@ -70,7 +70,8 @@ ggplot() +
   geom_path(data = dat2, aes(Longitude, Latitude, group = Ptt, color = Ptt), size = 0.25) +
   scale_color_viridis_d() +
   theme_bw() +
-  coord_sf(xlim = c(-130,0), ylim = c(-10,50))
+  coord_sf(xlim = c(min(dat2$Longitude) - 1, max(dat2$Longitude) + 1),
+           ylim = c(min(dat2$Latitude) - 1, max(dat2$Latitude) + 1))
 
 
 # Let's make this map interactive so we can see a little better
@@ -80,7 +81,8 @@ plotly::ggplotly(
     geom_path(data = dat2, aes(Longitude, Latitude, group = Ptt, color = Ptt), size = 0.25) +
     scale_color_viridis_d() +
     theme_bw() +
-    coord_sf(xlim = c(-130,0), ylim = c(-10,50))
+    coord_sf(xlim = c(min(dat2$Longitude) - 1, max(dat2$Longitude) + 1),
+             ylim = c(min(dat2$Latitude) - 1, max(dat2$Latitude) + 1))
 )
 #there appear to be a handful of IDs that have spiked trajectories or unlikely movements that we'll need to filter
 
@@ -93,35 +95,35 @@ dat2 %>%
 
 
 
-### Remove locations likely before tag deployment ###
+#### Remove locations likely before tag deployment ####
 
 # Filter by study extent
 dat3<- dat2 %>%
-  filter(Latitude < 0 & Longitude > -42 & Longitude < -30)
+  filter(Latitude < -3 & Longitude > -40)
 
 ggplot() +
   geom_path(data = dat3, aes(Longitude, Latitude, group = Ptt, color = Ptt), size = 0.25) +
   scale_color_viridis_d() +
   theme_bw()
-# looks better
+# looks better; unfiltered spikes will be removed later
 
 # Inspect time series plots of lat and long
 ggplot() +
   geom_line(data = dat3, aes(Date, Longitude, color = Ptt)) +
   scale_color_viridis_d() +
   theme_bw() +
-  facet_wrap(~Ptt, scales = "free_y")
+  facet_wrap(~Ptt, scales = "free")
 
 ggplot() +
   geom_line(data = dat3, aes(Date, Latitude, color = Ptt)) +
   scale_color_viridis_d() +
   theme_bw() +
-  facet_wrap(~Ptt, scales = "free_y")
+  facet_wrap(~Ptt, scales = "free")
 # nothing else needs to be dealt with at this point
 
 
 
 
-### Export cleaned data ###
+#### Export cleaned data ####
 
 write.csv(dat3, "Processed_data/Cleaned_FDN Cmydas tracks.csv", row.names = FALSE)
