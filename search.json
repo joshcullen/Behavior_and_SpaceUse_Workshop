@@ -18,7 +18,7 @@
     "href": "workshop-resources.html",
     "title": "Resources related to covered topics",
     "section": "",
-    "text": "foieGras package website\nmomentuHMM package tutorial\n\nmomentuHMM GitHub repo\n\nbayesmove package website \namt package tutorials\n\namt GitHub repo\n\nmove package website\n\n\n\n\n\n\n\ncrawl and crawlUtils\n\npublication\ncrawl GitHub repo\ncrawlUtils GitHub repo\nguide to using crawl\n\nBayesian state-space models for animal movement (bsam)\n\nGitHub repo\n\n\n\n\n\n\nseclust2d\n\npublication\npackage website\n\nhmmTMB\n\nGitHub repo w/ tutorials\n\nmove persistence mixed effects model (mpmm)\n\npublication\nGitHub repo\n\nBayesian state-space models for animal movement (bsam)\n\nGitHub repo\n\n\n\n\n\n\nautocorrelated kernel density estimation (aKDE)\n\npublication\nctmm package website\nctmmweb Shiny app\n\nlocal convex hull (LoCoH)\n\npublication\nT-LoCoH package website\n\nmovement-based kernel density estimation (MKDE) aka biased random bridges (BRB)\n\npublication\nadehabitatHR guide\n\nspace-use as function of covariates\n\ncontinuous-time discrete space model\n\npublication\nCRAN package website\n\nstep-selection functions (SSFs)\n\npublication\nbrief guide from pub\ntutorial on fitting SSF w/ `amt\n\nBrownian bridge covariates model\n\npublication\nmoveBrownianModel package website"
+    "text": "foieGras package website\nmomentuHMM package tutorial\n\nmomentuHMM GitHub repo\n\nbayesmove package website \namt package tutorials\n\namt GitHub repo\n\nmove package website\n\n\n\n\n\n\n\ncrawl and crawlUtils\n\npublication\ncrawl GitHub repo\ncrawlUtils GitHub repo\nguide to using crawl\n\nBayesian state-space models for animal movement (bsam)\n\nGitHub repo\n\n\n\n\n\n\nseclust2d\n\npublication\npackage website\n\nhmmTMB\n\nGitHub repo w/ tutorials\n\nmove persistence mixed effects model (mpmm)\n\npublication\nGitHub repo\n\nBayesian state-space models for animal movement (bsam)\n\nGitHub repo\n\n\n\n\n\n\nautocorrelated kernel density estimation (aKDE)\n\npublication\nctmm package website\nctmmweb Shiny app\n\nlocal convex hull (LoCoH)\n\npublication\nT-LoCoH package website\n\nmovement-based kernel density estimation (MKDE) aka biased random bridges (BRB)\n\npublication\nadehabitatHR guide\n\nspace-use as function of covariates\n\ncontinuous-time discrete space model\n\npublication\nCRAN package website\n\nstep-selection functions (SSFs)\n\npublication\nbrief guide from pub\ntutorial on fitting SSF w/ amt\n\nBrownian bridge covariates model\n\npublication\nmoveBrownianModel package website"
   },
   {
     "objectID": "workshop-resources.html#behavioral-state-estimation-1",
@@ -32,7 +32,7 @@
     "href": "workshop-resources.html#space-use-estimation-1",
     "title": "Resources related to covered topics",
     "section": "Space-use estimation",
-    "text": "Space-use estimation\n\nMinimum convex polygon\n\n\nKernel density estimation\n\n\nDynamic Brownian Bridge Movement Model"
+    "text": "Space-use estimation\n\nMinimum convex polygon\n\nWorton 1995 A convex hull-based estimator of home-range size\nNilsen et al. 2008 Can minimum convex polygon home ranges be used to draw biologically meaningful conclusions?\n\n\n\nKernel density estimation\n\n\nDynamic Brownian Bridge Movement Model"
   },
   {
     "objectID": "index.html",
