@@ -1,5 +1,5 @@
 ---
-title: "<span style='font-family: Georgia; font-size: 3rem;'>Space-use and behavioral state estimation from animal telemetry data</span>"
+title: "Space-use and behavioral state estimation from animal telemetry data"
 ---
 
 # How to extract more from your animal movement data in R

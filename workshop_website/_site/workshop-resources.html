@@ -59,7 +59,7 @@ ul.task-list{list-style: none;}
 
 
 <meta name="twitter:title" content="Space-Use and Behavioral State Estimation Workshop - Resources related to covered topics">
-<meta name="twitter:image" content="https://joshcullen.github.io/workshop_website/images/twitter-card.png">
+<meta name="twitter:image" content="https://joshcullen.github.io/Behavior_and_SpaceUse_Workshop/images/twitter-card.png">
 <meta name="twitter:creator" content="@josh_a_cullen">
 <meta name="twitter:card" content="summary_large_image">
 </head>
@@ -135,12 +135,12 @@ ul.task-list{list-style: none;}
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false">Computing</a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Computing</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./computing-troubleshooting.html" class="sidebar-item-text sidebar-link">Troubleshooting</a>
@@ -179,7 +179,7 @@ ul.task-list{list-style: none;}
   <ul class="collapse">
   <li><a href="#minimum-convex-polygon" id="toc-minimum-convex-polygon" class="nav-link" data-scroll-target="#minimum-convex-polygon">Minimum convex polygon</a></li>
   <li><a href="#kernel-density-estimation" id="toc-kernel-density-estimation" class="nav-link" data-scroll-target="#kernel-density-estimation">Kernel density estimation</a></li>
-  <li><a href="#dynamic-brownian-bridge-movement-model" id="toc-dynamic-brownian-bridge-movement-model" class="nav-link" data-scroll-target="#dynamic-brownian-bridge-movement-model">Dynamic Brownian Bridge Movement Model</a></li>
+  <li><a href="#dynamic-brownian-bridge-movement-model" id="toc-dynamic-brownian-bridge-movement-model" class="nav-link" data-scroll-target="#dynamic-brownian-bridge-movement-model">Dynamic Brownian bridge movement model</a></li>
   </ul></li>
   </ul></li>
   </ul>
@@ -293,7 +293,7 @@ ul.task-list{list-style: none;}
 <ul>
 <li><a href="https://esajournals.onlinelibrary.wiley.com/doi/full/10.1002/ecs2.1771">publication</a></li>
 <li><a href="https://esajournals.onlinelibrary.wiley.com/action/downloadSupplement?doi=10.1002%2Fecs2.1771&amp;file=ecs21771-sup-0003-AppendixS3.pdf">brief guide from pub</a></li>
-<li><a href="https://cran.r-project.org/web/packages/amt/vignettes/p4_SSF.html">tutorial on fitting SSF w/ `amt</a></li>
+<li><a href="https://cran.r-project.org/web/packages/amt/vignettes/p4_SSF.html">tutorial on fitting SSF w/ <code>amt</code></a></li>
 </ul></li>
 <li>Brownian bridge covariates model
 <ul>
@@ -367,12 +367,38 @@ ul.task-list{list-style: none;}
 <h2 class="anchored" data-anchor-id="space-use-estimation-1">Space-use estimation</h2>
 <section id="minimum-convex-polygon" class="level3">
 <h3 class="anchored" data-anchor-id="minimum-convex-polygon">Minimum convex polygon</h3>
+<ul>
+<li>Worton 1995 <a href="https://www.jstor.org/stable/pdf/2533254.pdf">A convex hull-based estimator of home-range size</a></li>
+<li>Nilsen et al.&nbsp;2008 <a href="https://link.springer.com/article/10.1007/s11284-007-0421-9">Can minimum convex polygon home ranges be used to draw biologically meaningful conclusions?</a></li>
+</ul>
 </section>
 <section id="kernel-density-estimation" class="level3">
 <h3 class="anchored" data-anchor-id="kernel-density-estimation">Kernel density estimation</h3>
+<ul>
+<li>Worton 1989 <a href="https://esajournals.onlinelibrary.wiley.com/doi/pdf/10.2307/1938423">Kernel methods for estimating the utilization distribution in home‐range studies</a></li>
+<li>Seaman and Powell 1996 <a href="https://esajournals.onlinelibrary.wiley.com/doi/epdf/10.2307/2265701">An evaluation of the accuracy of kernel density estimators for home range analysis</a></li>
+<li>Gitzen and Millspaugh 2003 <a href="https://www.jstor.org/stable/pdf/3784605.pdf">Comparison of least-squares cross-validation bandwidth options for kernel home-range estimation</a></li>
+<li>Fieberg and Kochanny 2005 <a href="https://wildlife.onlinelibrary.wiley.com/doi/pdfdirect/10.2193/0022-541X%282005%2969%5B1346%3AQHOTIO%5D2.0.CO%3B2">Quantifying home‐range overlap: The importance of the utilization distribution</a></li>
+<li>Fieberg 2007 <a href="https://esajournals.onlinelibrary.wiley.com/doi/full/10.1890/06-0930">Kernel density estimators of home range: Smoothing and the autocorrelation red herring</a></li>
+<li>Boyle et al.&nbsp;2008 <a href="https://brill.com/view/journals/ijfp/80/1/article-p33_4.xml">Home range estimates vary with sample size and methods</a></li>
+<li>Kie et al.&nbsp;2010 <a href="https://royalsocietypublishing.org/doi/full/10.1098/rstb.2010.0093">The home-range concept: are traditional estimators still relevant with modern telemetry technology?</a></li>
+<li>Fieberg and Börger 2012 <a href="https://academic.oup.com/jmammal/article/93/4/890/962756">Could you please phrase “home range” as a question?</a></li>
+<li>Fleming et al.&nbsp;2015 <a href="https://esajournals.onlinelibrary.wiley.com/doi/abs/10.1890/14-2010.1">Rigorous home range estimation with movement data: a new autocorrelated kernel density estimator</a></li>
+<li>Fleming and Calabrese 2017 <a href="https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.12673">A new kernel density estimator for accurate home‐range and species‐range area estimation</a></li>
+<li>Noonan et al.&nbsp;2019 <a href="https://esajournals.onlinelibrary.wiley.com/doi/full/10.1002/ecm.1344">A comprehensive analysis of autocorrelation and bias in home range estimation</a></li>
+<li>Signer and Fieberg 2021 <a href="https://peerj.com/articles/11031/?fbclid=IwAR3fH1JNWzk7TIFYS6QY8zQeu2lfUAGx30rZ6Xm-uSsodria6Rtf5pCiUpk&amp;utm_source=TrendMD&amp;utm_campaign=PeerJ_TrendMD_0&amp;utm_medium=TrendMD">A fresh look at an old concept: home-range estimation in a tidy world</a></li>
+<li>Fleming et al.&nbsp;2022 <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13815">Population-level inference for home-range areas</a></li>
+<li>Silva et al.&nbsp;2022 <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13786">Autocorrelation-informed home range estimation: A review and practical guide</a></li>
+</ul>
 </section>
 <section id="dynamic-brownian-bridge-movement-model" class="level3">
-<h3 class="anchored" data-anchor-id="dynamic-brownian-bridge-movement-model">Dynamic Brownian Bridge Movement Model</h3>
+<h3 class="anchored" data-anchor-id="dynamic-brownian-bridge-movement-model">Dynamic Brownian bridge movement model</h3>
+<ul>
+<li>Horne et al.&nbsp;2007 <a href="https://esajournals.onlinelibrary.wiley.com/doi/full/10.1890/06-0957.1">Analyzing animal movements using Brownian bridges</a></li>
+<li>Kranstauber et al.&nbsp;2012 <a href="https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/j.1365-2656.2012.01955.x">A dynamic Brownian bridge movement model to estimate utilization distributions for heterogeneous animal movement</a></li>
+<li>Byrne et al.&nbsp;2014 <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2656.12205">Using dynamic Brownian bridge movement modelling to measure temporal patterns of habitat selection</a></li>
+<li>Silva et al.&nbsp;2020 <a href="https://movementecologyjournal.biomedcentral.com/articles/10.1186/s40462-020-00229-3">Reptiles on the wrong track? Moving beyond traditional estimators with dynamic Brownian Bridge Movement Models</a></li>
+</ul>
 </section>
 </section>
 </section>

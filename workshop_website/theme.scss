@@ -1,15 +1,19 @@
 /*-- scss:defaults --*/
 
-@font-face {
-  font-family: 'Rajdhani';
-  src: url('fonts/Rajdhani-Regular.ttf') format("trutype");
+@import url('https://fonts.googleapis.com/css2?family=Bitter');
+@import url('https://fonts.googleapis.com/css2?family=Exo');
+@import url('https://fonts.googleapis.com/css2?family=Lato');
+
+
+
+
+/*--scss:rules--*/
+
+#title-block-header.quarto-title-block.default .quarto-title .title {
+  font-family: "Bitter", $headings-font-family;
+  font-size: 3rem;
 }
 
-@font-face {
-  font-family: 'Exo';
-  src: url('fonts/Exo-Regular.ttf') format("trutype");
+h1, h2, h3 {
+  font-family: "Lato";
 }
-
-
-$font-family-serif: Rajdhani,"Exo", Georgia, 'Times New Roman', Times, serif;
-

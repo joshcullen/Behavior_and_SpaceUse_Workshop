@@ -19,7 +19,7 @@ website:
     background: "light"
 
   sidebar:
-    background: "#D9E3E4"
+    background: "#83C5BE"
     # logo: "images/logo.png"
     pinned: true
     align: left
@@ -33,7 +33,7 @@ website:
 
     style: "docked"
     search: true
-    collapse-level: 1
+    collapse-level: 0
     contents:
       - section: "Workshop information"
         contents:
