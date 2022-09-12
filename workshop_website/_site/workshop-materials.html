@@ -24,6 +24,8 @@ ul.task-list{list-style: none;}
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<script src="site_libs/cookie-consent/cookie-consent.js"></script>
+<link href="site_libs/cookie-consent/cookie-consent.css" rel="stylesheet">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -56,11 +58,36 @@ ul.task-list{list-style: none;}
     "search-submit-button-title": "Submit"
   }
 }</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-R5TYR42Z4J"></script>
+
+<script type="text/plain" cookie-consent="tracking">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-R5TYR42Z4J', { 'anonymize_ip': true});
+</script>
+
+<script type="text/javascript" charset="UTF-8">
+document.addEventListener('DOMContentLoaded', function () {
+cookieconsent.run({
+  "notice_banner_type":"simple",
+  "consent_type":"implied",
+  "palette":"light",
+  "language":"en",
+  "page_load_consent_levels":["strictly-necessary","functionality","tracking","targeting"],
+  "notice_banner_reject_button_hide":false,
+  "preferences_center_close_button_hide":false,
+  "website_name":""
+  });
+});
+</script> 
+  
 
 
 <meta name="twitter:title" content="Space-Use and Behavioral State Estimation Workshop - Materials">
 <meta name="twitter:description" content="This page contains an outline of the topics, content, and assignments for the workshop. Video recordings will be added after the workshop has ended.">
-<meta name="twitter:image" content="https://joshcullen.github.io/Behavior_and_SpaceUse_Workshop/images/twitter-card.png">
+<meta name="twitter:image" content="https://joshcullen.github.io/workshop_website/images/twitter-card.png">
 <meta name="twitter:creator" content="@josh_a_cullen">
 <meta name="twitter:card" content="summary_large_image">
 </head>
@@ -197,48 +224,62 @@ ul.task-list{list-style: none;}
 <tbody>
 <tr class="odd">
 <td>Thurs, Sep 8</td>
-<td>Clean and explore tracks</td>
-<td style="text-align: center;"><i class="fa-solid fa-globe fa-xl" aria-hidden="true"></i> <i class="fa-solid fa-file-pdf fa-xl" aria-hidden="true"></i></td>
-<td style="text-align: center;"><a href="https://github.com/joshcullen/Behavior_and_SpaceUse_Workshop/blob/main/R_BehavStates/01_Clean%20and%20explore%20tracks.R" title="R code"><i class="fa-solid fa-code fa-xl" aria-hidden="true"></i></a></td>
+<td>Intro to behavioral state estimation</td>
+<td style="text-align: center;"><i class="fa-solid fa-globe fa-xl" aria-hidden="true"></i> <a href="./Slides/Behavior/Intro_to_movement_ecology.pdf"><i class="fa-solid fa-file-pdf fa-xl" aria-hidden="true"></i></a></td>
+<td style="text-align: center;"></td>
 <td style="text-align: center;"><p><i class="fa-solid fa-video fa-xl" aria-hidden="true"></i></p></td>
 </tr>
 <tr class="even">
+<td></td>
+<td>Clean and explore tracks</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"><a href="https://github.com/joshcullen/Behavior_and_SpaceUse_Workshop/blob/main/R_BehavStates/01_Clean%20and%20explore%20tracks.R" title="R code"><i class="fa-solid fa-code fa-xl" aria-hidden="true"></i></a></td>
+<td style="text-align: center;"><p><i class="fa-solid fa-video fa-xl" aria-hidden="true"></i></p></td>
+</tr>
+<tr class="odd">
 <td></td>
 <td>Fit SSM via <code>foieGras</code></td>
 <td style="text-align: center;"><i class="fa-solid fa-globe fa-xl" aria-hidden="true"></i> <i class="fa-solid fa-file-pdf fa-xl" aria-hidden="true"></i></td>
 <td style="text-align: center;"><a href="https://github.com/joshcullen/Behavior_and_SpaceUse_Workshop/blob/main/R_BehavStates/02_Fit%20SSM%20in%20foieGras.R" title="R code"><i class="fa-solid fa-code fa-xl" aria-hidden="true"></i></a></td>
 <td style="text-align: center;"><p><i class="fa-solid fa-video fa-xl" aria-hidden="true"></i></p></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td></td>
 <td>Fit HMM via <code>momentuHMM</code></td>
 <td style="text-align: center;"><i class="fa-solid fa-globe fa-xl" aria-hidden="true"></i> <i class="fa-solid fa-file-pdf fa-xl" aria-hidden="true"></i></td>
 <td style="text-align: center;"><a href="https://github.com/joshcullen/Behavior_and_SpaceUse_Workshop/blob/main/R_BehavStates/03_Fit%20HMM%20in%20momentuHMM.R" title="R code"><i class="fa-solid fa-code fa-xl" aria-hidden="true"></i></a></td>
 <td style="text-align: center;"><p><i class="fa-solid fa-video fa-xl" aria-hidden="true"></i></p></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td></td>
 <td>Fit NP Bayesian models via <code>bayesmove</code></td>
 <td style="text-align: center;"><i class="fa-solid fa-globe fa-xl" aria-hidden="true"></i> <i class="fa-solid fa-file-pdf fa-xl" aria-hidden="true"></i></td>
 <td style="text-align: center;"><a href="https://github.com/joshcullen/Behavior_and_SpaceUse_Workshop/blob/main/R_BehavStates/04_Fit%20NP%20Bayesian%20models%20in%20bayesmove.R" title="R code"><i class="fa-solid fa-code fa-xl" aria-hidden="true"></i></a></td>
 <td style="text-align: center;"><p><i class="fa-solid fa-video fa-xl" aria-hidden="true"></i></p></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td></td>
 <td>Compare behavioral state estimates</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;"><a href="https://github.com/joshcullen/Behavior_and_SpaceUse_Workshop/blob/main/R_BehavStates/05_Compare%20behavioral%20state%20estimates.R" title="R code"><i class="fa-solid fa-code fa-xl" aria-hidden="true"></i></a></td>
 <td style="text-align: center;"><p><i class="fa-solid fa-video fa-xl" aria-hidden="true"></i></p></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td></td>
 <td>Recommended guidelines for selecting a method</td>
 <td style="text-align: center;"><i class="fa-solid fa-globe fa-xl" aria-hidden="true"></i> <i class="fa-solid fa-file-pdf fa-xl" aria-hidden="true"></i></td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;"><p><i class="fa-solid fa-video fa-xl" aria-hidden="true"></i></p></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Fri, Sep 9</td>
+<td>Intro to space-use estimation</td>
+<td style="text-align: center;"><i class="fa-solid fa-globe fa-xl" aria-hidden="true"></i> <i class="fa-solid fa-file-pdf fa-xl" aria-hidden="true"></i></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"><p><i class="fa-solid fa-video fa-xl" aria-hidden="true"></i></p></td>
+</tr>
+<tr class="odd">
+<td></td>
 <td>Estimate space-use with MCP via <code>amt</code></td>
 <td style="text-align: center;"><i class="fa-solid fa-globe fa-xl" aria-hidden="true"></i> <i class="fa-solid fa-file-pdf fa-xl" aria-hidden="true"></i></td>
 <td style="text-align: center;"><a href="https://github.com/joshcullen/Behavior_and_SpaceUse_Workshop/blob/main/R_SpaceUse/01_MCPs.R" title="R code"><i class="fa-solid fa-code fa-xl" aria-hidden="true"></i></a></td>
@@ -486,6 +527,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">© 2022, Josh Cullen. License: <a href="https://github.com/joshcullen/Behavior_and_SpaceUse_Workshop/blob/main/LICENSE">MIT</a></div>   
+      <div class="nav-footer-center"><div class="cookie-consent-footer"><a href="#" id="open_preferences_center">Cookie Preferences</a></div></div>
     <div class="nav-footer-right">This page is built with <i class="fa-brands fa-r-project" aria-hidden="true"></i> and <a href="https://quarto.org/">Quarto</a></div>
   </div>
 </footer>

@@ -2,6 +2,72 @@
 title: "How to prepare for this workshop"
 ---
 
-Include a set of instructions for which software are required for this workshop. Primarily focused on the set of R packages that need to be installed, as well as a compiler tool for a specific OS (including R and optionally RStudio). This means pointing attendees to the websites they need to go to for downloading specialty software, such as Xcode, gfortran, etc.
+This workshop assumes that participants are already familiar with R and have already installed [R](https://www.r-project.org) (and potentially [RStudio](https://www.rstudio.com/products/rstudio/download/#download)). Please install the below R packages before attending the workshop so that any unforeseen issues can be resolved beforehand.
 
-Provide explicit instructions that attendees should attempt to install all software at least 2 days before the workshop. That way I can help if they run into issues and can't install or run some of the necessary R packages.
+
+## Software and tools
+
+Some of the packages used in this workshop require developer tools to be installed before the R package can be successfully downloaded and installed. This will slightly differ depending on the operating system that is used. **This should only be required if downloading directly from GitHub, so it will likely be easier to follow the instructions at the bottom of the page first before trying to install the developer tools described below.**
+
+*For Mac users:*
+Per instructions from the `foieGras` [README](https://github.com/ianjonsen/foieGras): 
+
+> Ensure you have installed the [Command Line Tools for Xcode](https://developer.apple.com/download/more/) by executing xcode-select --install in the terminal; or you can download the latest version from the URL (free developer registration may be required). A full Xcode install uses up a lot of disk space and is not required. Also, ensure you have a suitable Gnu Fortran compiler installed (e.g., <https://github.com/fxcoudert/gfortran-for-macOS/releases>).
+
+
+*For PC users:*
+Please download [RTools](https://cran.r-project.org/bin/windows/Rtools/), which should install all of the necessary developer tools for you.
+
+
+## Required R packages
+
+All of the below packages can be installed directly from CRAN using `install.packages()` within the R console. However, more recent versions are likely available from the package's GitHub repo or from an R-Universe repo. This is particularly important for the `foieGras` package.
+<br>
+
+* data wrangling and visualization
+  * tidyverse
+  * lubridate
+  * furrr
+  * future
+  * plotly
+  * tictoc
+  * MetBrewer
+  * viridis
+  * units
+  
+* spatial analysis
+  * sf
+  * rnaturalearth
+  * rerddapXtracto
+
+* behavioral state estimation
+  * foieGras
+  * momentuHMM
+  * bayesmove
+
+* space-use estimation
+  * amt
+  * move
+
+
+Specifically for the `foieGras` package, the below instructions are copied from the package's README:
+
+As of `v1.0-5`, `{foieGras}` is available via R-Universe. This is where the latest stable version can always be found. Installation is simple:
+```{r, eval = FALSE}
+# install from R-universe repository
+install.packages("foieGras", 
+                 repos = "https://ianjonsen.r-universe.dev")
+```
+However, this will not install any of `{foieGras}`'s Suggested packages, which add extra functionality such as path re-routing around land. To ensure all Suggested packages, either from R-Universe or CRAN are also installed:
+```{r, eval=FALSE}
+install.packages("foieGras", 
+                 repos = c("https://cloud.r-project.org",
+                           "https://ianjonsen.r-universe.dev"),
+                 dependencies = "Suggests")
+```
+`install.packages` will tell you that both a binary (CRAN, v0.7-6) and a source (R-Universe, >= v1.0-7) version exist but the source version is newer. Answer `Yes` to install the source version, provided you have the appropriate compiler tools described above.
+<br><br>
+
+It is recommended to install the latest version due to increased model speed and functionality, which is expected to only be hosted via GitHub or R-Universe. However, the CRAN version can be installed if problems with installation cannot be resolved.
+
+

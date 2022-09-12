@@ -2,4 +2,8 @@
 title: "Troubleshooting computer problems"
 ---
 
-Point attendees towards relevant websites, primarily related to issues w/ compiler errors or TMB install.
+Via `foieGras`: 
+
+> There can be issues getting compilers to work properly, especially on M1 Macs. Often, this is due to missing or incorrect Xcode Command Line Tools and/or Fortran compiler. If you encounter install and compile issues, you may find a solution in the excellent documentation here [glmmTMB](https://github.com/glmmTMB/glmmTMB).
+
+Another good resource for `foieGras`-specific technical problems is the ['Issues'](https://github.com/ianjonsen/foieGras/issues?q=is%3Aissue+is%3Aclosed) page of the GitHub repo.

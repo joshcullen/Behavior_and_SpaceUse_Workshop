@@ -24,6 +24,8 @@ ul.task-list{list-style: none;}
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<script src="site_libs/cookie-consent/cookie-consent.js"></script>
+<link href="site_libs/cookie-consent/cookie-consent.css" rel="stylesheet">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -56,10 +58,35 @@ ul.task-list{list-style: none;}
     "search-submit-button-title": "Submit"
   }
 }</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-R5TYR42Z4J"></script>
+
+<script type="text/plain" cookie-consent="tracking">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-R5TYR42Z4J', { 'anonymize_ip': true});
+</script>
+
+<script type="text/javascript" charset="UTF-8">
+document.addEventListener('DOMContentLoaded', function () {
+cookieconsent.run({
+  "notice_banner_type":"simple",
+  "consent_type":"implied",
+  "palette":"light",
+  "language":"en",
+  "page_load_consent_levels":["strictly-necessary","functionality","tracking","targeting"],
+  "notice_banner_reject_button_hide":false,
+  "preferences_center_close_button_hide":false,
+  "website_name":""
+  });
+});
+</script> 
+  
 
 
 <meta name="twitter:title" content="Space-Use and Behavioral State Estimation Workshop - Troubleshooting computer problems">
-<meta name="twitter:description" content="Point attendees towards relevant websites, primarily related to issues w/ compiler errors or TMB install.">
+<meta name="twitter:description" content="Via foieGras:">
 <meta name="twitter:image" content="https://joshcullen.github.io/Behavior_and_SpaceUse_Workshop/images/twitter-card.png">
 <meta name="twitter:creator" content="@josh_a_cullen">
 <meta name="twitter:card" content="summary_large_image">
@@ -175,7 +202,11 @@ ul.task-list{list-style: none;}
 
 </header>
 
-<p>Point attendees towards relevant websites, primarily related to issues w/ compiler errors or TMB install.</p>
+<p>Via <code>foieGras</code>:</p>
+<blockquote class="blockquote">
+<p>There can be issues getting compilers to work properly, especially on M1 Macs. Often, this is due to missing or incorrect Xcode Command Line Tools and/or Fortran compiler. If you encounter install and compile issues, you may find a solution in the excellent documentation here <a href="https://github.com/glmmTMB/glmmTMB">glmmTMB</a>.</p>
+</blockquote>
+<p>Another good resource for <code>foieGras</code>-specific technical problems is the <a href="https://github.com/ianjonsen/foieGras/issues?q=is%3Aissue+is%3Aclosed">‘Issues’</a> page of the GitHub repo.</p>
 
 
 
@@ -384,6 +415,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">© 2022, Josh Cullen. License: <a href="https://github.com/joshcullen/Behavior_and_SpaceUse_Workshop/blob/main/LICENSE">MIT</a></div>   
+      <div class="nav-footer-center"><div class="cookie-consent-footer"><a href="#" id="open_preferences_center">Cookie Preferences</a></div></div>
     <div class="nav-footer-right">This page is built with <i class="fa-brands fa-r-project" aria-hidden="true"></i> and <a href="https://quarto.org/">Quarto</a></div>
   </div>
 </footer>

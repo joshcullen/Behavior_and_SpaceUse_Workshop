@@ -5,7 +5,14 @@ website:
   title: "Space-Use and Behavioral State Estimation Workshop"
   site-url: "https://joshcullen.github.io/workshop_website/"
   repo-url: "https://github.com/joshcullen/Behavior_and_SpaceUse_Workshop"
-
+  google-analytics:
+    tracking-id: "G-R5TYR42Z4J"
+    anonymize-ip: true
+    storage: cookies
+  cookie-consent:
+    type: implied
+    style: simple
+    palette: light
   opengraph: true
   twitter-card:
     creator: "@josh_a_cullen"

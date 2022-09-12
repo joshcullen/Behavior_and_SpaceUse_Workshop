@@ -53,6 +53,13 @@ title: "Resources related to covered topics"
   - [publication](https://wildlife.onlinelibrary.wiley.com/doi/pdfdirect/10.1111/j.1937-2817.2010.tb01257.x?casa_token=9PPoYZbq9IcAAAAA:CsR_G-0UNZudXshUFoNQqBof7q5jVdrIoWmvlivlQ7ho6byjZN5XAXgeA21UUa4G4CgwUpTg-1Plu3zv)
   - [`adehabitatHR` guide](https://cran.r-project.org/web/packages/adehabitatHR/vignettes/adehabitatHR.pdf)
 * space-use as function of covariates
+  - geostatistical mixed effects models (aka log Gaussian Cox process)
+    - [Bakka et al. 2019 "Non-stationary Gaussian models with physical barriers"](https://www.sciencedirect.com/science/article/pii/S221167531830099X?casa_token=v7Cra_Pdf4kAAAAA:5j26CkAhIEYSvl7M1N5pXh01detrbFYDMF6aD1QVVrNf4dlreLnDIuO4kCXJO3Q1z7eum3vYriM)
+    - [Winton et al. 2018 "Estimating the distribution and relative density of satellite-tagged loggerhead sea turtles using geostatistical mixed effects models"](https://www.int-res.com/abstracts/meps/v586/p217-232/)
+    - [Bachl et al. 2019 "`inlabru`: an R package for Bayesian spatial modelling from ecological survey data"](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13168)
+    - [R-INLA package website](https://www.r-inla.org)
+    - [inlabru package website](https://sites.google.com/inlabru.org/inlabru)
+    - [geospatial INLA examples in R](https://www.paulamoraga.com/book-geospatial/index.html)
   - continuous-time discrete space model
     - [publication](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.12967)
     - [CRAN package website](https://cran.r-project.org/web/packages/ctmcmove/index.html)
@@ -77,11 +84,13 @@ title: "Resources related to covered topics"
 * Jonsen et al. 2007  [Identifying leatherback turtle foraging behaviour from satellite telemetry using a switching state-space model](https://www.int-res.com/articles/meps2007/337/m337p255.pdf)
 * Johnson et al. 2008  [Continuous‐time correlated random walk model for animal telemetry data](https://esajournals.onlinelibrary.wiley.com/doi/abs/10.1890/07-1032.1)
 * Patterson et al. 2008  [State–space models of individual animal movement](https://www.sciencedirect.com/science/article/pii/S0169534707003588)
+* Schick et al. 2008 [Understanding movement data and movement processes: current and emerging directions](https://www.whoi.edu/cms/files/Schick2008_UnderstandingMovementDataProcesses_53549.pdf)
 * Breed et al. 2009  [Sex‐specific, seasonal foraging tactics of adult grey seals (*Halichoerus grypus*) revealed by state–space analysis](https://esajournals.onlinelibrary.wiley.com/doi/abs/10.1890/07-1483.1)
 * Breed et al. 2012  [State-space methods for more completely capturing behavioral dynamics from animal tracks](https://www.sciencedirect.com/science/article/pii/S0304380012001378)
 * Bestley et al. 2013  [Integrative modelling of animal movement: incorporating in situ habitat and behavioural information for a migratory marine predator](https://royalsocietypublishing.org/doi/abs/10.1098/rspb.2012.2262)
 * Jonsen et al. 2013  [State-space models for bio-loggers: A methodological road map](https://www.sciencedirect.com/science/article/pii/S096706451200094X)
 * McClintock et al. 2013  [Combining individual animal movement and ancillary biotelemetry data to investigate population‐level activity budgets](https://esajournals.onlinelibrary.wiley.com/doi/abs/10.1890/12-0954.1)
+* Schick et al. 2013 [Estimating resource acquisition and at‐sea body condition of a marine predator](http://lenthomas.org/papers/SchickJAE2013.pdf)
 * Martins et al. 2014  [Behavioral attributes of turbine entrainment risk for adult resident fish revealed by acoustic telemetry and state-space modeling](https://animalbiotelemetry.biomedcentral.com/articles/10.1186/2050-3385-2-13)
 * Alos et al. 2016  [Bayesian state-space modelling of conventional acoustic tracking provides accurate descriptors of home range behavior in a small-bodied coastal fish species](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0154089)
 * Jonsen et al. 2016  [Joint estimation over multiple individuals improves behavioural state inference from animal movement data](https://www.nature.com/articles/srep20625)
@@ -91,6 +100,7 @@ title: "Resources related to covered topics"
 * Jonsen et al. 2019  [Movement responses to environment: fast inference of variation among southern elephant seals with a mixed effects model](https://esajournals.onlinelibrary.wiley.com/doi/abs/10.1002/ecy.2566)
 * Jonsen et al. 2020  [A continuous-time state-space model for rapid quality control of argos locations from animal-borne tags](https://movementecologyjournal.biomedcentral.com/articles/10.1186/s40462-020-00217-7)
 * Auger-Methe et al. 2021  [A guide to state–space modeling of ecological time series](https://esajournals.onlinelibrary.wiley.com/doi/abs/10.1002/ecm.1470)
+* Newman et al. 2022 [State‐space models for ecological time‐series data: Practical model‐fitting](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13833)
 
 
 ### Hidden Markov models
@@ -101,19 +111,22 @@ title: "Resources related to covered topics"
 * Michelot et al. 2016  [`moveHMM`: an R package for the statistical modelling of animal movement data using hidden Markov models](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.12578)
 * Leos-Barajas et al. 2017  [Analysis of animal accelerometer data using hidden Markov models](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.12657)
 * Leos-Barajas et al. 2017  [Multi-scale modeling of animal movement and general behavior data using hidden Markov models with hierarchical structures](https://link.springer.com/article/10.1007/s13253-017-0282-9)
+* Michelot et al. 2017 [Estimation and simulation of foraging trips in land‐based marine predators](https://core.ac.uk/download/pdf/211706757.pdf)
 * Patterson et al. 2017  [Statistical modelling of individual animal movement: an overview of key methods and a discussion of practical challenges](https://link.springer.com/article/10.1007/s10182-017-0302-7)
 * Pohle et al. 2017  [Selecting the number of states in hidden Markov models: pragmatic solutions illustrated using animal movement](https://link.springer.com/article/10.1007/s13253-017-0283-8)
+* Grecian et al. 2018 [Understanding the ontogeny of foraging behaviour: insights from combining marine predator bio-logging with satellite-derived oceanography in hidden Markov models](https://royalsocietypublishing.org/doi/full/10.1098/rsif.2018.0084)
 * Langrock et al. 2018  [Spline‐based nonparametric inference in general state‐switching models](https://onlinelibrary.wiley.com/doi/abs/10.1111/stan.12133)
 * Leos-Barajas and Michelot 2018  [An introduction to animal movement modeling with hidden Markov Models using Stan for Bayesian inference](https://arxiv.org/pdf/1806.10639.pdf)
 * McClintock and Michelot 2018  [`momentuHMM`: R package for generalized hidden Markov models of animal movement](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.12995)
 * Adam et al. 2019  [Joint modelling of multi‐scale animal movement data using hierarchical hidden Markov models](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13241)
+* Michelot and Blackwell 2019 [State‐switching continuous‐time correlated random walks](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13154)
 * Carter et al. 2020  [From pup to predator: generalized hidden Markov models reveal rapid development of movement strategies in a naïve long‐lived vertebrate](https://onlinelibrary.wiley.com/doi/abs/10.1111/oik.06853)
 * McClintock et al. 2020  [Uncovering ecological state dynamics with hidden Markov models](https://onlinelibrary.wiley.com/doi/abs/10.1111/ele.13610)
 * Glennie et al. 2022  [Hidden Markov Models: Pitfalls and Opportunities in Ecology](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13801)
 
 
 ### Non-parametric Bayesian mixture and mixed-membership models
-* Cullen et al. 2021  [Identifying latent behavioural states in animal movement with M4, a nonparametric Bayesian method](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13745)
+* Cullen et al. 2022  [Identifying latent behavioural states in animal movement with M4, a nonparametric Bayesian method](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13745)
 * Valle et al. 2022  [Automatic selection of the number of clusters using Bayesian clustering and sparsity-inducing priors](https://esajournals.onlinelibrary.wiley.com/doi/abs/10.1002/eap.2524)
 * Cullen et al. In Review  *Biologging as an important tool to uncover behaviors of cryptic species*
 

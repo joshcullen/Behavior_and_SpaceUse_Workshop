@@ -10,7 +10,6 @@ library(sf)  #v1.0.7
 library(rnaturalearth)
 library(tictoc)
 library(plotly)
-# library(future)  #needed to properly run foieGras::osar() in parallel
 
 
 #### Load data ####
@@ -128,7 +127,7 @@ brazil<- ne_countries(scale = 50, country = "Brazil", returnclass = 'sf')
 
 ggplot() +
   geom_sf(data = brazil) +
-  geom_path(data = dat3, aes(lon, lat, group = id), color = 'black') +  #raw tracks
+  geom_path(data = dat2, aes(lon, lat, group = id), color = 'black') +  #raw tracks
   geom_path(data = res_crw_fitted, aes(lon, lat, group = id), color = "blue") +  #modeled tracks
   theme_bw() +
   facet_wrap(~id) +
@@ -227,7 +226,7 @@ res_crw_8hr<- join(ssm = fit_crw_8hr,
 # Compare raw tracks vs fitted tracks (for adults tagged at Fernando de Noronha)
 ggplot() +
   geom_sf(data = brazil) +
-  geom_path(data = dat3, aes(lon, lat, group = id), color = 'black') +  #raw tracks
+  geom_path(data = dat2, aes(lon, lat, group = id), color = 'black') +  #raw tracks
   geom_path(data = res_crw_8hr, aes(lon, lat, group = id), color = "blue") +  #modeled tracks
   theme_bw() +
   facet_wrap(~id) +
