@@ -11,7 +11,7 @@
     "href": "workshop-materials.html",
     "title": "Materials",
     "section": "",
-    "text": "Date\nTopic\nSlides\nCode\nVideo Recording\n\n\n\n\nThurs, Sep 8\nIntro to behavioral state estimation\n\n\n\n\n\n\nClean and explore tracks\n\n\n\n\n\n\nFit SSM via foieGras\n\n\n\n\n\n\nFit HMM via momentuHMM\n\n\n\n\n\n\nFit NP Bayesian models via bayesmove\n\n\n\n\n\n\nCompare behavioral state estimates\n\n\n\n\n\n\nRecommended guidelines for selecting a method\n\n\n\n\n\nFri, Sep 9\nIntro to space-use estimation\n\n\n\n\n\n\nEstimate space-use with MCP via amt\n\n\n\n\n\n\nEstimate space-use with KDE via amt\n\n\n\n\n\n\nEstimate space-use with dBBMM via move\n\n\n\n\n\n\nCompare space-use estimates\n\n\n\n\n\n\nRecommended guidelines for selecting a method"
+    "text": "Date\nTopic\nSlides\nCode\nVideo Recording\n\n\n\n\nThurs, Sep 8\nIntro to behavioral state estimation\n\n\n\n\n\n\nClean and explore tracks\n\n\n\n\n\n\nFit SSM via foieGras\n\n\nLecture, Live-coding\n\n\n\nFit HMM via momentuHMM\n\n\nLecture, Live-coding\n\n\n\nFit NP Bayesian models via bayesmove\n\n\nLecture, Live-coding\n\n\n\nCompare behavioral state estimates\n\n\n\n\n\n\nRecommended guidelines for selecting a method\n\n\n\n\n\nFri, Sep 9\nIntro to space-use estimation\n\n\n\n\n\n\nEstimate space-use with MCP via amt\n\n\n\n\n\n\nEstimate space-use with KDE via amt\n\n\nLecture, Live-coding\n\n\n\nEstimate space-use with dBBMM via move\n\n\nLecture, Live-coding\n\n\n\nCompare space-use estimates\n\n\n\n\n\n\nRecommended guidelines for selecting a method"
   },
   {
     "objectID": "workshop-resources.html",
