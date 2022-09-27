@@ -20,6 +20,19 @@ glimpse(dat)
 summary(dat)
 n_distinct(dat$Ptt)
 
+## Structure of dataset ##
+#PTT: animal ID (Platform Transmitter Terminal; PTT)
+#Date: datetime of each relocation
+#Longitude: longitude of relocation
+#Latitude: latitude of relocation
+#Type: label defining whether observation was transmitted via Fastloc GPS or Argos doppler-shift
+#Quality: the number of satellites for FastGPS observations and the location class (LC) for Argos observations
+#Error.radius: the radius of the estimated error for each observation (in meters)
+#Error.Semi.major.axis: the distance (in meters) along the semi-major axis of the estimated error ellipse
+#Error.Semi.minor.axis: the distance (in meters) along the semi-minor axis of the estimated error ellipse
+#Error.Ellipse.orientation: the angle (in degrees) defining the orientation of the estimated error ellipse
+
+
 # Inspect columns of pertinent variables
 table(dat$Ptt, useNA = "ifany")
 table(dat$Type, useNA = "ifany")
