@@ -17,7 +17,7 @@ library(MetBrewer)
 
 #### Load data ####
 
-dat <- read.csv('Processed_data/SSM_mp8hr_FDN Cmydas tracks.csv')
+dat <- read.csv('../Processed_data/SSM_mp8hr_FDN Cmydas tracks.csv')
 
 glimpse(dat)
 summary(dat)
