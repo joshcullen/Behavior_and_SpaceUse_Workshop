@@ -14,12 +14,18 @@ An NSF-funded workshop by [Josh Cullen](https://joshcullen.github.io)
 
 ------------------------------------------------------------------------
 
+::: {.callout-note}
+
+## Update
+The `foieGras` package has since been renamed `aniMotum` since this workshop was held. Any mention of the `foieGras` package in video recordings or other materials on this website that haven't been updated should therefore refer to `animMotum` instead moving forward.
+:::
+
 # Workshop overview and motivation
 
 The collection, analysis, and inferences made from animals tracked via satellite and acoustic telemetry have become common within the field of animal movement ecology and conservation. With these datasets, researchers and conservation practitioners are often interested in what the tagged animals are doing and where they’re doing it. There are an ever-growing number of tools that can make it difficult to determine which method to use for a particular project goal or dataset. This 2-day workshop will present a set of established methods commonly used to account for location error, estimate unobserved animal behavioral states and space-use, as well as some cutting-edge methods that have recently been developed.
 
 ::: {layout-ncol=2}
-![Behavioral state estimates from the `foieGras` package](images/Promo_behavior_plot.png)
+![Behavioral state estimates from the `aniMotum` package](images/Promo_behavior_plot.png)
 
 ![Kernel density estimates of space-use from the `amt` package](images/Promo_KDE_plot.png)
 :::

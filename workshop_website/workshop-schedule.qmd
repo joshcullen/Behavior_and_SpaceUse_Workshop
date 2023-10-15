@@ -3,15 +3,19 @@ title: "Schedule"
 tbl-colwidths: [2,3,5]
 ---
 
-This page contains a tentative itinerary for the 2-day workshop. Note that this schedule may be subject to change depending on how quickly we move through the material. *All times in this schedule are reported in Eastern Time, so please account for the time difference if you belong to a different time zone.*
+This page contains a tentative itinerary for the 2-day workshop. Note
+that this schedule may be subject to change depending on how quickly we
+move through the material. *All times in this schedule are reported in
+Eastern Time, so please account for the time difference if you belong to
+a different time zone.*
 
 | Date                | Time                | Topic                                                                   |
-|---------------|---------------|------------------------------------------|
+|-----------------|-----------------|---------------------------------------|
 | **Thurs., Sept. 8** | 9:00 - 9:30 am      | Intro to animal movement ecology and behavioral state estimation        |
 |                     | 9:30 - 10:15 am     | Exploratory data analysis                                               |
 |                     | 10:15 - 10:30 am    | **Coffee break**                                                        |
 |                     | 10:30 - 11:00 am    | Lecture on state-space models (SSMs)                                    |
-|                     | 11:00 am - 12:00 pm | Analyze tracks w/ SSMs via `foieGras`                                   |
+|                     | 11:00 am - 12:00 pm | Analyze tracks w/ SSMs via `aniMotum`                                   |
 |                     | 12:00 - 1:30 pm     | **Lunch**                                                               |
 |                     | 1:30 - 2:00 pm      | Lecture on hidden Markov models (HMMs)                                  |
 |                     | 2:00 - 3:00 pm      | Analyze tracks w/ HMMs via `momentuHMM`                                 |

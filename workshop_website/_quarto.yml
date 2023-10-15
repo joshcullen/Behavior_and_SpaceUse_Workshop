@@ -13,7 +13,7 @@ website:
     type: implied
     style: simple
     palette: light
-  opengraph: true
+  open-graph: true
   twitter-card:
     creator: "@josh_a_cullen"
     image: "images/twitter-card.png"
@@ -22,7 +22,7 @@ website:
     right: |
       This page is built with {{< fa brands r-project >}} and [Quarto](https://quarto.org/)
     left: |
-      &copy; 2022, Josh Cullen. License: [MIT](https://github.com/joshcullen/Behavior_and_SpaceUse_Workshop/blob/main/LICENSE)
+      &copy; 2023, Josh Cullen. License: [MIT](https://github.com/joshcullen/Behavior_and_SpaceUse_Workshop/blob/main/LICENSE)
     background: "light"
 
   sidebar:

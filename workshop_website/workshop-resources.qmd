@@ -5,7 +5,7 @@ title: "Resources related to covered topics"
 # Other Resources
 
 ## R package websites and tutorials
-* [`foieGras` package website](https://ianjonsen.github.io/foieGras/index.html)
+* [`aniMotum` package website](https://ianjonsen.github.io/aniMotum)
 * [`momentuHMM` package tutorial](https://cran.r-project.org/web/packages/momentuHMM/vignettes/momentuHMM.pdf)
   - [`momentuHMM` GitHub repo](https://github.com/bmcclintock/momentuHMM)
 * [`bayesmove` package website](https://joshcullen.github.io/bayesmove/)
@@ -101,6 +101,7 @@ title: "Resources related to covered topics"
 * Jonsen et al. 2020  [A continuous-time state-space model for rapid quality control of argos locations from animal-borne tags](https://movementecologyjournal.biomedcentral.com/articles/10.1186/s40462-020-00217-7)
 * Auger-Methe et al. 2021  [A guide to state–space modeling of ecological time series](https://esajournals.onlinelibrary.wiley.com/doi/abs/10.1002/ecm.1470)
 * Newman et al. 2022 [State‐space models for ecological time‐series data: Practical model‐fitting](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13833)
+* Jonsen et al. 2023 [`aniMotum`, an R package for animal movement data: Rapid quality control, behavioural estimation and simulation](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.14060)
 
 
 ### Hidden Markov models
@@ -128,7 +129,8 @@ title: "Resources related to covered topics"
 ### Non-parametric Bayesian mixture and mixed-membership models
 * Cullen et al. 2022  [Identifying latent behavioural states in animal movement with M4, a nonparametric Bayesian method](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13745)
 * Valle et al. 2022  [Automatic selection of the number of clusters using Bayesian clustering and sparsity-inducing priors](https://esajournals.onlinelibrary.wiley.com/doi/abs/10.1002/eap.2524)
-* Cullen et al. In Review  *Biologging as an important tool to uncover behaviors of cryptic species*
+* Cullen et al. 2023  [Biologging as an important tool to uncover behaviors of cryptic species: an analysis of giant armadillos (*Priodontes maximus*)](https://peerj.com/articles/14726/)
+* Santos et al. 2023 [Decoding the internesting movements of marine turtles using a finescale behavioral state approach](https://www.frontiersin.org/articles/10.3389/fevo.2023.1229144/)
 
 
 ## Space-use estimation

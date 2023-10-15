@@ -2,8 +2,8 @@
 title: "Troubleshooting computer problems"
 ---
 
-Via `foieGras`: 
+Via `aniMotum`: 
 
 > There can be issues getting compilers to work properly, especially on M1 Macs. Often, this is due to missing or incorrect Xcode Command Line Tools and/or Fortran compiler. If you encounter install and compile issues, you may find a solution in the excellent documentation here [glmmTMB](https://github.com/glmmTMB/glmmTMB).
 
-Another good resource for `foieGras`-specific technical problems is the ['Issues'](https://github.com/ianjonsen/foieGras/issues?q=is%3Aissue+is%3Aclosed) page of the GitHub repo.
+Another good resource for `aniMotum`-specific technical problems is the ['Issues'](https://github.com/ianjonsen/aniMotum/issues?q=is%3Aissue+is%3Aclosed) page of the GitHub repo. For more information on installing this package, please refer to the installation instructions from the README on the `aniMotum` [website](https://ianjonsen.github.io/aniMotum/).
