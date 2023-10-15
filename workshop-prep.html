@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.0.38">
+<meta name="generator" content="quarto-1.2.313">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -11,10 +11,15 @@
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-span.underline{text-decoration: underline;}
-div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -53,7 +58,7 @@ code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -66,7 +71,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -148,9 +153,12 @@ cookieconsent.run({
   
 
 
+<meta property="og:title" content="Space-Use and Behavioral State Estimation Workshop - How to prepare for this workshop">
+<meta property="og:description" content="This workshop assumes that participants are already familiar with R and have already installed R (and potentially RStudio).">
+<meta property="og:site-name" content="Space-Use and Behavioral State Estimation Workshop">
 <meta name="twitter:title" content="Space-Use and Behavioral State Estimation Workshop - How to prepare for this workshop">
 <meta name="twitter:description" content="This workshop assumes that participants are already familiar with R and have already installed R (and potentially RStudio).">
-<meta name="twitter:image" content="https://joshcullen.github.io/Behavior_and_SpaceUse_Workshop/images/twitter-card.png">
+<meta name="twitter:image" content="https://joshcullen.github.io/workshop_website/images/twitter-card.png">
 <meta name="twitter:creator" content="@josh_a_cullen">
 <meta name="twitter:card" content="summary_large_image">
 </head>
@@ -244,7 +252,7 @@ cookieconsent.run({
 </nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc">
+        <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
@@ -266,6 +274,7 @@ cookieconsent.run({
 <div class="quarto-title-meta">
 
     
+  
     
   </div>
   
@@ -276,7 +285,7 @@ cookieconsent.run({
 <section id="software-and-tools" class="level2">
 <h2 class="anchored" data-anchor-id="software-and-tools">Software and tools</h2>
 <p>Some of the packages used in this workshop require developer tools to be installed before the R package can be successfully downloaded and installed. This will slightly differ depending on the operating system that is used. <strong>This should only be required if downloading directly from GitHub, so it will likely be easier to follow the instructions at the bottom of the page first before trying to install the developer tools described below.</strong></p>
-<p><em>For Mac users:</em> Per instructions from the <code>foieGras</code> <a href="https://github.com/ianjonsen/foieGras">README</a>:</p>
+<p><em>For Mac users:</em> Per instructions from the <code>aniMotum</code> <a href="https://github.com/ianjonsen/aniMotum">README</a>:</p>
 <blockquote class="blockquote">
 <p>Ensure you have installed the <a href="https://developer.apple.com/download/more/">Command Line Tools for Xcode</a> by executing xcode-select –install in the terminal; or you can download the latest version from the URL (free developer registration may be required). A full Xcode install uses up a lot of disk space and is not required. Also, ensure you have a suitable Gnu Fortran compiler installed (e.g., <a href="https://github.com/fxcoudert/gfortran-for-macOS/releases" class="uri">https://github.com/fxcoudert/gfortran-for-macOS/releases</a>).</p>
 </blockquote>
@@ -284,7 +293,7 @@ cookieconsent.run({
 </section>
 <section id="required-r-packages" class="level2">
 <h2 class="anchored" data-anchor-id="required-r-packages">Required R packages</h2>
-<p>All of the below packages can be installed directly from CRAN using <code>install.packages()</code> within the R console. However, more recent versions are likely available from the package’s GitHub repo or from an R-Universe repo. This is particularly important for the <code>foieGras</code> package. <br></p>
+<p>All of the below packages can be installed directly from CRAN using <code>install.packages()</code> within the R console. However, more recent versions are likely available from the package’s GitHub repo or from an R-Universe repo. This is particularly important for the <code>aniMotum</code> package. <br></p>
 <ul>
 <li>data wrangling and visualization
 <ul>
@@ -306,7 +315,7 @@ cookieconsent.run({
 </ul></li>
 <li>behavioral state estimation
 <ul>
-<li>foieGras</li>
+<li>aniMotum</li>
 <li>momentuHMM</li>
 <li>bayesmove</li>
 </ul></li>
@@ -316,22 +325,16 @@ cookieconsent.run({
 <li>move</li>
 </ul></li>
 </ul>
-<p>Specifically for the <code>foieGras</code> package, the below instructions are copied from the package’s README:</p>
-<p>As of <code>v1.0-5</code>, <code>{foieGras}</code> is available via R-Universe. This is where the latest stable version can always be found. Installation is simple:</p>
+<p>Specifically for the <code>aniMotum</code> package, the below instructions are copied from the package’s README:</p>
+<p>As of <code>v1.0-5</code>, <code>{aniMotum}</code> is available via R-Universe. This is where the latest stable version can always be found. Installation is simple:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install from R-universe repository</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"foieGras"</span>, </span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">repos =</span> <span class="st">"https://ianjonsen.r-universe.dev"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"aniMotum"</span>, </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://cloud.r-project.org"</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"https://ianjonsen.r-universe.dev"</span>),</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">dependencies =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>However, this will not install any of <code>{foieGras}</code>’s Suggested packages, which add extra functionality such as path re-routing around land. To ensure all Suggested packages, either from R-Universe or CRAN are also installed:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"foieGras"</span>, </span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://cloud.r-project.org"</span>,</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                           <span class="st">"https://ianjonsen.r-universe.dev"</span>),</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">dependencies =</span> <span class="st">"Suggests"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p><code>install.packages</code> will tell you that both a binary (CRAN, v0.7-6) and a source (R-Universe, &gt;= v1.0-7) version exist but the source version is newer. Answer <code>Yes</code> to install the source version, provided you have the appropriate compiler tools described above. <br><br></p>
-<p>It is recommended to install the latest version due to increased model speed and functionality, which is expected to only be hosted via GitHub or R-Universe. However, the CRAN version can be installed if problems with installation cannot be resolved.</p>
+<p>The version on CRAN is no longer being updated, so it is highly recommended that users install a binary or tarball file from the R-Universe or GitHub repositories. Further installation instructions and details for troubleshooting the installation of <code>aniMotum</code> can be found on the package <a href="https://ianjonsen.github.io/aniMotum/">website</a>.</p>
 
 
 </section>
@@ -408,6 +411,16 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         }
       }
     }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
   }
   const isFileUrl = () => { 
     return window.location.protocol === 'file:';
@@ -459,7 +472,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   // Switch to dark mode if need be
   if (hasAlternateSentinel()) {
     toggleColorMode(true);
-  } 
+  } else {
+    toggleColorMode(false);
+  }
   const icon = "";
   const anchorJS = new window.AnchorJS();
   anchorJS.options = {
@@ -481,7 +496,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
     button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
     setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
       button.setAttribute("title", currentTitle);
       button.classList.remove('code-copy-button-checked');
     }, 1000);
@@ -509,38 +541,57 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   for (var i=0; i<noterefs.length; i++) {
     const ref = noterefs[i];
     tippyHover(ref, function() {
-      let href = ref.getAttribute('href');
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
     });
   }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
   var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
   for (var i=0; i<bibliorefs.length; i++) {
     const ref = bibliorefs[i];
-    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
-    tippyHover(ref, function() {
-      var popup = window.document.createElement('div');
-      cites.forEach(function(cite) {
-        var citeDiv = window.document.createElement('div');
-        citeDiv.classList.add('hanging-indent');
-        citeDiv.classList.add('csl-entry');
-        var biblioDiv = window.document.getElementById('ref-' + cite);
-        if (biblioDiv) {
-          citeDiv.innerHTML = biblioDiv.innerHTML;
-        }
-        popup.appendChild(citeDiv);
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
       });
-      return popup.innerHTML;
-    });
+    }
   }
 });
 </script>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-    <div class="nav-footer-left">© 2022, Josh Cullen. License: <a href="https://github.com/joshcullen/Behavior_and_SpaceUse_Workshop/blob/main/LICENSE">MIT</a></div>   
+    <div class="nav-footer-left">© 2023, Josh Cullen. License: <a href="https://github.com/joshcullen/Behavior_and_SpaceUse_Workshop/blob/main/LICENSE">MIT</a></div>   
       <div class="nav-footer-center"><div class="cookie-consent-footer"><a href="#" id="open_preferences_center">Cookie Preferences</a></div></div>
     <div class="nav-footer-right">This page is built with <i class="fa-brands fa-r-project" aria-hidden="true"></i> and <a href="https://quarto.org/">Quarto</a></div>
   </div>
