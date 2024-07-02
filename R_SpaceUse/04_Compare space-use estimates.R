@@ -5,9 +5,9 @@
 
 library(tidyverse)
 library(lubridate)
-library(amt)  #v0.1.7
-library(move)  #v4.0.6
-library(sf)  #v1.0.7
+library(amt)
+library(move)
+library(sf)
 library(rnaturalearth)
 library(MetBrewer)
 library(units)
@@ -57,22 +57,22 @@ ud.all <- rbind(mcp, kde.href, kde.hpi, dbbmm)
 
 # Show all IDs, methods, and levels
 ggplot() +
-  geom_sf(data = brazil) +
-  geom_path(data = dat, aes(x, y, group = id), size = 0.5, alpha = 0.5) +
-  geom_sf(data = ud.all, aes(color = method), fill = "transparent", size = 0.5) +
+  # geom_sf(data = brazil) +
+  geom_path(data = dat, aes(x, y, group = id), linewidth = 0.5, alpha = 0.5) +
+  geom_sf(data = ud.all, aes(color = method), fill = "transparent", linewidth = 0.5) +
   scale_color_met_d('Egypt') +
   theme_bw() +
-  coord_sf(xlim = c(min(dat$x) - 50, max(dat$x) + 50),
-           ylim = c(min(dat$y) - 50, max(dat$y) + 50)) +
+  # coord_sf(xlim = c(min(dat$x) - 50, max(dat$x) + 50),
+  #          ylim = c(min(dat$y) - 50, max(dat$y) + 50)) +
   facet_grid(id ~ level)
 #large disparity among methods for migrating IDs
 
 # Zoom in on resident IDs
 ggplot() +
   geom_path(data = dat %>%
-              filter(id %in% c(205544,226072)), aes(x, y, group = id), size = 0.5, alpha = 0.15) +
+              filter(id %in% c(205544)), aes(x, y, group = id), linewidth = 0.5, alpha = 0.15) +
   geom_sf(data = ud.all %>%
-            filter(id %in% c(205544,226072)), aes(color = method), fill = "transparent", size = 0.5) +
+            filter(id %in% c(205544)), aes(color = method), fill = "transparent", linewidth = 0.5) +
   scale_color_met_d('Egypt') +
   theme_bw() +
   facet_grid(id ~ level)
@@ -86,7 +86,7 @@ ggplot() +
 #### Compare estimated area of space-use ####
 
 ud.all$area <- st_area(ud.all)
-ud.all$strategy <- ifelse(ud.all$id %in% c(205544,226072), 'Resident', 'Migratory')
+ud.all$strategy <- ifelse(ud.all$id %in% c(205544), 'Resident', 'Migratory')
 
 
 # Compare by method and UD level

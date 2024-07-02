@@ -5,8 +5,9 @@
 
 library(tidyverse)
 library(lubridate)
-library(amt)  #v0.1.7
-library(sf)  #v1.0.7
+library(amt)
+library(sf)
+library(terra)
 library(rnaturalearth)
 library(plotly)
 library(tictoc)
@@ -52,23 +53,24 @@ brazil<- ne_countries(scale = 50, country = "Brazil", returnclass = 'sf')
 
 # Plot returned raster layer (may not be ideal in some instances)
 ggplot() +
-  geom_tile(data = raster::as.data.frame(dat.kde.ref$ud, xy = TRUE), aes(x, y, fill = layer)) +
-  geom_sf(data = st_transform(brazil, crs = "+proj=merc +lon_0=0 +datum=WGS84 +units=km +no_defs")) +
+  geom_tile(data = as.data.frame(dat.kde.ref$ud, xy = TRUE), aes(x, y, fill = lyr.1)) +
+  # geom_sf(data = st_transform(brazil, crs = "+proj=merc +lon_0=0 +datum=WGS84 +units=km +no_defs")) +
   geom_point(data = dat, aes(x, y), alpha = 0.25, size = 1, color = "chartreuse") +
   scale_fill_viridis_c(option = "inferno") +
-  theme_bw() +
-  coord_sf(xlim = c(min(dat$x) - 50, max(dat$x) + 50),
-           ylim = c(min(dat$y) - 50, max(dat$y) + 50))
+  theme_bw() #+
+  # coord_sf(xlim = c(min(dat$x) - 50, max(dat$x) + 50),
+  #          ylim = c(min(dat$y) - 50, max(dat$y) + 50))
 
 
 # Plot isopleth contours as requested levels
 ggplot() +
-  geom_sf(data = brazil) +
-  geom_path(data = dat, aes(lon, lat, group = id), alpha = 0.25, size = 0.3) +
-  geom_sf(data = kde.href.contours, aes(color = factor(level)), fill = 'transparent', size = 0.75) +
+  # geom_sf(data = brazil) +
+  geom_path(data = dat, aes(lon, lat, group = id), alpha = 0.25, linewidth = 0.3) +
+  geom_sf(data = kde.href.contours, aes(color = factor(level)), fill = 'transparent', linewidth = 0.75) +
   scale_color_met_d('Egypt') +
   theme_bw() +
-  coord_sf(xlim = c(-42, -32), ylim = c(-8, -2))
+  coord_sf(default_crs = 4326)
+  # coord_sf(xlim = c(-42, -32), ylim = c(-8, -2))
 
 
 
@@ -85,13 +87,14 @@ kde.hpi.contours <- hr_isopleths(dat.kde.pi)
 
 # Plot isopleth contours as requested levels
 ggplot() +
-  geom_sf(data = brazil) +
-  geom_path(data = dat, aes(lon, lat, group = id), alpha = 0.25, size = 0.3) +
-  geom_sf(data = kde.hpi.contours, aes(color = factor(level)), fill = 'transparent', size = 0.75) +
+  # geom_sf(data = brazil) +
+  geom_path(data = dat, aes(lon, lat, group = id), alpha = 0.25, linewidth = 0.3) +
+  geom_sf(data = kde.hpi.contours, aes(color = factor(level)), fill = 'transparent', linewidth = 0.75) +
   scale_color_met_d('Egypt') +
   theme_bw() +
   theme(panel.grid = element_blank()) +
-  coord_sf(xlim = c(-42, -32), ylim = c(-8, -2))
+  coord_sf(default_crs = 4326)
+  # coord_sf(xlim = c(-42, -32), ylim = c(-8, -2))
 
 
 
@@ -119,7 +122,7 @@ dat.id.kde.href <- dat.track %>%
       ) %>%
   map(hr_isopleths) %>%  #extract contours from raster layers
   do.call(rbind, .)  #merge all contours into single `sf` object
-toc()  #takes 28 sec to run
+toc()  #takes 0.1 sec to run
 BRRR::skrrrahh('ross1')  #let me know that it's done running!
 
 dat.id.kde.href <- dat.id.kde.href %>%
@@ -128,12 +131,13 @@ dat.id.kde.href <- dat.id.kde.href %>%
 
 
 ggplot() +
-  geom_sf(data = brazil) +
-  geom_path(data = dat, aes(lon, lat, group = id), alpha = 0.25, size = 0.3) +
-  geom_sf(data = dat.id.kde.href, aes(color = factor(level)), fill = 'transparent', size = 0.75) +
+  # geom_sf(data = brazil) +
+  geom_path(data = dat, aes(lon, lat, group = id), alpha = 0.25, linewidth = 0.3) +
+  geom_sf(data = dat.id.kde.href, aes(color = factor(level)), fill = 'transparent', linewidth = 0.75) +
   scale_color_met_d('Egypt') +
   theme_bw() +
-  coord_sf(xlim = c(-44, -30), ylim = c(-9, 0)) +
+  coord_sf(default_crs = 4326) +
+  # coord_sf(xlim = c(-44, -30), ylim = c(-9, 0)) +
   facet_wrap(~ id)
 
 
@@ -146,7 +150,7 @@ ggplot() +
 dat.id.list <- dat.track %>%
   split(.$id) %>%
   map(~{.x %>%
-      mutate(pattern = ifelse(min(lon) > -34, 'Resident', 'Migratory'))
+      mutate(pattern = ifelse(min(lon) > 0, 'Resident', 'Migratory'))
     })
 
 id.pattern <- dat.id.list %>%
@@ -167,7 +171,7 @@ dat.mig.kde.hpi <- dat.id.list[mig.ind] %>%
   ) %>%
   map(hr_isopleths) %>%
   do.call(rbind, .)
-toc()  #takes 3 sec to run
+toc()  #takes 0.07 sec to run
 BRRR::skrrrahh('khaled3')
 
 
@@ -188,12 +192,13 @@ dat.id.kde.hpi <- rbind(dat.mig.kde.hpi, dat.res.kde.hpi) %>%
 
 
 ggplot() +
-  geom_sf(data = brazil) +
-  geom_path(data = dat, aes(lon, lat, group = id), alpha = 0.25, size = 0.3) +
-  geom_sf(data = dat.id.kde.hpi, aes(color = factor(level)), fill = 'transparent', size = 0.75) +
+  # geom_sf(data = brazil) +
+  geom_path(data = dat, aes(lon, lat, group = id), alpha = 0.25, linewidth = 0.3) +
+  geom_sf(data = dat.id.kde.hpi, aes(color = factor(level)), fill = 'transparent', linewidth = 0.75) +
   scale_color_met_d('Egypt') +
   theme_bw() +
-  coord_sf(xlim = c(-42, -32), ylim = c(-8, -2)) +
+  coord_sf(default_crs = 4326) +
+  # coord_sf(xlim = c(-42, -32), ylim = c(-8, -2)) +
   facet_wrap(~ id)
 
 

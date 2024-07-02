@@ -5,8 +5,8 @@
 
 library(tidyverse)
 library(lubridate)
-library(move)  #v4.0.6
-library(sf)  #v1.0.7
+library(move)
+library(sf)
 library(rnaturalearth)
 library(plotly)
 library(tictoc)
@@ -17,7 +17,7 @@ library(MetBrewer)
 
 #### Load data ####
 
-dat <- read.csv('../Processed_data/SSM_mp8hr_FDN Cmydas tracks.csv')
+dat <- read.csv('Processed_data/SSM_mp8hr_FDN Cmydas tracks.csv')
 
 glimpse(dat)
 summary(dat)
@@ -50,7 +50,7 @@ dat2 <- dat %>%
 
 # Create 'move' object
 dat.list <- vector("list", length(dat2))  #to store dBBMM results
-contours<- vector("list", length(dat2))  #to store resulting 50% and 95% UD contours
+contours <- vector("list", length(dat2))  #to store resulting 50% and 95% UD contours
 
 
 # Estimate separately by ID
@@ -118,22 +118,22 @@ brazil<- ne_countries(scale = 50, country = "Brazil", returnclass = 'sf') %>%
   st_transform(crs = "+proj=merc +lon_0=0 +datum=WGS84 +units=km +no_defs")
 
 ggplot() +
-  geom_sf(data = brazil) +
-  geom_sf(data = contours2, aes(color = UD.level), fill = "transparent", size = 0.5) +
+  # geom_sf(data = brazil) +
+  geom_sf(data = contours2, aes(color = UD.level), fill = "transparent", linewidth = 0.5) +
   scale_color_met_d('Egypt') +
   theme_bw() +
-  facet_wrap(~ UD.level, nrow = 2) +
-  coord_sf(xlim = c(min(dat$x) - 50, max(dat$x) + 50),
-           ylim = c(min(dat$y) - 50, max(dat$y) + 50))
+  facet_wrap(~ UD.level, nrow = 2) #+
+  # coord_sf(xlim = c(min(dat$x) - 50, max(dat$x) + 50),
+  #          ylim = c(min(dat$y) - 50, max(dat$y) + 50))
 
 ggplot() +
-  geom_sf(data = brazil) +
-  geom_sf(data = contours2, aes(color = UD.level), fill = "transparent", size = 0.5) +
+  # geom_sf(data = brazil) +
+  geom_sf(data = contours2, aes(color = UD.level), fill = "transparent", linewidth = 0.5) +
   scale_color_met_d('Egypt') +
   theme_bw() +
-  facet_wrap(~ id) +
-  coord_sf(xlim = c(min(dat$x) - 50, max(dat$x) + 50),
-           ylim = c(min(dat$y) - 50, max(dat$y) + 50))
+  facet_wrap(~ id) #+
+  # coord_sf(xlim = c(min(dat$x) - 50, max(dat$x) + 50),
+  #          ylim = c(min(dat$y) - 50, max(dat$y) + 50))
 
 
 
@@ -143,62 +143,36 @@ ggplot() +
 
 #205537
 ggplot() +
-  geom_path(data = dat2[['205537']], aes(x, y), size = 0.75, alpha = 0.5) +
+  geom_path(data = dat2[['205537']], aes(x, y), linewidth = 0.75, alpha = 0.5) +
   geom_sf(data = contours2 %>%
-            filter(id == 205537), aes(color = UD.level), fill = "transparent", size = 0.5) +
+            filter(id == 205537), aes(color = UD.level), fill = "transparent", linewidth = 0.5) +
   scale_color_met_d('Egypt') +
   labs(title = 'ID 205537') +
   theme_bw()
 
-#205540
-ggplot() +
-  geom_path(data = dat2[['205540']], aes(x, y), size = 0.75, alpha = 0.5) +
-  geom_sf(data = contours2 %>%
-            filter(id == 205540), aes(color = UD.level), fill = "transparent", size = 0.5) +
-  scale_color_met_d('Egypt') +
-  labs(title = 'ID 205540') +
-  theme_bw()
-
 #205544
 ggplot() +
-  geom_path(data = dat2[['205544']], aes(x, y), size = 0.75, alpha = 0.25) +
+  geom_path(data = dat2[['205544']], aes(x, y), linewidth = 0.75, alpha = 0.25) +
   geom_sf(data = contours2 %>%
-            filter(id == 205544), aes(color = UD.level), fill = "transparent", size = 0.5) +
+            filter(id == 205544), aes(color = UD.level), fill = "transparent", linewidth = 0.5) +
   scale_color_met_d('Egypt') +
   labs(title = 'ID 205544') +
   theme_bw()
 
-#226072
-ggplot() +
-  geom_path(data = dat2[['226072']], aes(x, y), size = 0.5, alpha = 0.5) +
-  geom_sf(data = contours2 %>%
-            filter(id == 226072), aes(color = UD.level), fill = "transparent", size = 0.5) +
-  scale_color_met_d('Egypt') +
-  labs(title = 'ID 226072') +
-  theme_bw()
-
-#41614
-ggplot() +
-  geom_path(data = dat2[['41614']], aes(x, y), size = 0.5, alpha = 0.5) +
-  geom_sf(data = contours2 %>%
-            filter(id == 41614), aes(color = UD.level), fill = "transparent", size = 0.5) +
-  scale_color_met_d('Egypt') +
-  labs(title = 'ID 41614') +
-  theme_bw()
 
 
 
 
 # Plot all tracks w/ UD contours
 ggplot() +
-  geom_sf(data = brazil) +
-  geom_path(data = dat, aes(x, y, color = factor(id), group = id), size = 0.5, alpha = 0.5) +
-  geom_sf(data = contours2, fill = "transparent", size = 0.75, color = 'black') +
+  # geom_sf(data = brazil) +
+  geom_path(data = dat, aes(x, y, color = factor(id), group = id), linewidth = 0.5, alpha = 0.5) +
+  geom_sf(data = contours2, fill = "transparent", linewidth = 0.75, color = 'black') +
   scale_color_viridis_d(option = 'turbo') +
   theme_bw() +
-  facet_wrap(~ UD.level, nrow = 2) +
-  coord_sf(xlim = c(min(dat$x) - 50, max(dat$x) + 50),
-           ylim = c(min(dat$y) - 50, max(dat$y) + 50))
+  facet_wrap(~ UD.level, nrow = 2) #+
+  # coord_sf(xlim = c(min(dat$x) - 50, max(dat$x) + 50),
+  #          ylim = c(min(dat$y) - 50, max(dat$y) + 50))
 
 
 

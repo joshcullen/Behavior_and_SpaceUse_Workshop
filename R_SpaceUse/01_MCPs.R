@@ -5,8 +5,8 @@
 
 library(tidyverse)
 library(lubridate)
-library(amt)  #v0.1.7
-library(sf)  #v1.0.7
+library(amt)
+library(sf)
 library(rnaturalearth)
 library(plotly)
 
@@ -38,12 +38,12 @@ plot(dat.mcp, col = c('red','green','blue'))
 brazil<- ne_countries(scale = 50, country = "Brazil", returnclass = 'sf')
 
 ggplot() +
-  geom_sf(data = brazil) +
+  # geom_sf(data = brazil) +
   geom_point(data = dat, aes(lon, lat), alpha = 0.25, size = 1) +
-  geom_sf(data = dat.mcp$mcp, aes(color = factor(level)), fill = 'transparent', size = 0.75) +
+  geom_sf(data = dat.mcp$mcp, aes(color = factor(level)), fill = 'transparent', linewidth = 0.75) +
   scale_color_viridis_d(direction = -1) +
-  theme_bw() +
-  coord_sf(xlim = c(-42, -32), ylim = c(-8, -2))
+  theme_bw() #+
+  # coord_sf(xlim = c(-42, -32), ylim = c(-8, -2))
 
 
 
@@ -65,12 +65,12 @@ dat.id.mcp <- dat.id.mcp %>%
 
 ggplotly(
   ggplot() +
-    geom_sf(data = brazil) +
+    # geom_sf(data = brazil) +
     geom_point(data = dat, aes(lon, lat, color = factor(id)), alpha = 0.25, size = 1) +
-    geom_sf(data = dat.id.mcp, aes(color = id), fill = 'transparent', size = 0.75) +
+    geom_sf(data = dat.id.mcp, aes(color = id), fill = 'transparent', linewidth = 0.75) +
     scale_color_viridis_d() +
-    theme_bw() +
-    coord_sf(xlim = c(-42, -32), ylim = c(-8, -2))
+    theme_bw() #+
+    # coord_sf(xlim = c(-42, -32), ylim = c(-8, -2))
 )
 
 

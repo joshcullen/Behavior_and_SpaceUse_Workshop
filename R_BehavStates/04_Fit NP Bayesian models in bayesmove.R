@@ -14,8 +14,8 @@
 
 library(tidyverse)
 library(lubridate)
-library(bayesmove)  #v0.2.1
-library(sf)  #v1.0.7
+library(bayesmove)
+library(sf)
 library(rnaturalearth)
 library(plotly)
 library(furrr)
@@ -38,7 +38,7 @@ summary(dat)
 dat <- dat %>%
   mutate(date = as_datetime(date))
 
-dat2<- prep_data(dat = dat, coord.names = c("x","y"), id = "id")
+dat2 <- prep_data(dat = dat, coord.names = c("x","y"), id = "id")
 head(dat2)
 #since x and y are in km, steps and NSD are in km
 # calculates step lengths, turning angles, net-squared displacement (NSD), and time step (dt)
@@ -96,7 +96,7 @@ angle.bin.lims <- seq(from = -pi, to = pi, by = pi/4)  #8 bins
 step.bin.lims <- c(seq(from = 0, to = 5, length = 6), max(dat2$step, na.rm = TRUE))  #6 bins
 
 # displacement (must be positive, but no upper bound)
-disp.bin.lims <- seq(from = 0, to = 800, by = 200)  #4 bins
+disp.bin.lims <- seq(from = 0, to = 400, by = 100)  #4 bins
 
 
 angle.bin.lims
@@ -135,7 +135,7 @@ ggplot(dat.disc) +
 #### Fit observation-level mixture model to estimate states ####
 
 # Only retain columns of discretized data streams
-dat.disc.sub<- dat.disc %>%
+dat.disc.sub <- dat.disc %>%
   dplyr::select(SL, TA, Disp) %>%
   data.frame()   #cluster_obs() function crashes if trying to use 'tibble'
 
@@ -149,9 +149,9 @@ nburn = ngibbs/2  #number of burn-in iterations
 nmaxclust = 7  #number of maximum possible states (clusters) present
 
 # Run model
-dat.res.obs<- cluster_obs(dat = dat.disc.sub, alpha = alpha, ngibbs = ngibbs, nmaxclust = nmaxclust,
+dat.res.obs <- cluster_obs(dat = dat.disc.sub, alpha = alpha, ngibbs = ngibbs, nmaxclust = nmaxclust,
                       nburn = nburn)
-# took 2.5 min to run
+# took 22 sec to run
 
 
 # Inspect traceplot of log-likelihood
@@ -160,14 +160,14 @@ abline(v = nburn, col = "red", lwd = 2)
 
 
 ## Inspect and plot results
-post.seq<- (nburn + 1):ngibbs  #posterior samples
+post.seq <- (nburn + 1):ngibbs  #posterior samples
 
 theta<- dat.res.obs$theta[post.seq,]
 colnames(theta)<- 1:ncol(theta)
 theta1<- colMeans(theta)
 theta1
 # theta1<- sort(theta1, decreasing = TRUE)
-cumsum(theta1)  #possibly 3 states present; represents > 90% of all obs
+cumsum(theta1)  #possibly 2 states present; represents > 90% of all obs
 
 
 
@@ -209,7 +209,7 @@ ggplot(behav.res.obs, aes(x = bin.vals, y = prop, fill = as.factor(behav))) +
   scale_fill_manual(values = c(viridis::viridis(4), rep("grey35", 3)), guide = 'none') +
   scale_y_continuous(breaks = c(0.00, 0.50, 1.00)) +
   facet_grid(behav ~ var, scales = "free_x")
-##actually looks like there's 4 states
+##actually looks like there's 3 states
 
 
 
@@ -236,7 +236,7 @@ dat.states<- dat.disc %>%
          z.post.thresh = z.post.thresh,
          z.post.max = z.post.max)
 
-n.states<- 4
+n.states<- 3
 dat.states$z.map<- ifelse(dat.states$z.map > n.states, NA, dat.states$z.map)
 dat.states$z.post.thresh<- ifelse(dat.states$z.post.thresh > n.states, NA, dat.states$z.post.thresh)
 dat.states$z.post.max<- ifelse(dat.states$z.post.max > n.states, NA, dat.states$z.post.max)
@@ -248,15 +248,13 @@ dat.states$z.post.max<- ifelse(dat.states$z.post.max > n.states, NA, dat.states$
 # Assign names to states
 dat.states2<- dat.states %>%
   mutate(across(c('z.map','z.post.thresh','z.post.max'),
-                ~case_when(. == 1 ~ "Breeding_Encamped",
+                ~case_when(. == 1 ~ "Breeding",
                            . == 2 ~ "Foraging",
-                           . == 3 ~ "Breeding_ARS",
-                           . == 4 ~ "Migratory",
+                           . == 3 ~ "Migratory",
                            is.na(.) ~ "Unclassified")
   )) %>%
   mutate(across(c('z.map','z.post.thresh','z.post.max'),
-                factor, levels = c('Breeding_Encamped','Breeding_ARS','Foraging',
-                                   'Migratory','Unclassified')
+                factor, levels = c('Breeding','Foraging','Migratory','Unclassified')
   ))
 
 
@@ -287,7 +285,7 @@ brazil <- ne_countries(scale = 50, country = "brazil", returnclass = 'sf') %>%
 # Using MAP estimates
 plotly::ggplotly(
   ggplot() +
-    geom_sf(data = brazil) +
+    # geom_sf(data = brazil) +
     geom_path(data = dat.states2, aes(x, y, group = id), color="grey60", size=0.25) +
     geom_point(data = dat.states2, aes(x, y, fill=z.map), size=1.5, pch=21, alpha=0.7) +
     geom_point(data = dat.states2 %>%
@@ -299,22 +297,22 @@ plotly::ggplotly(
                  slice(which(row_number() == n())) %>%
                  ungroup(), aes(x, y), color = "red", pch = 24, size = 3, stroke = 1.25) +
     scale_fill_manual("Behavior",
-                      values = c(viridis::viridis(4), "grey50")) +
+                      values = c(viridis::viridis(3), "grey50")) +
     labs(x = "Easting", y = "Northing", title = "MAP estimate") +
     theme_bw() +
     theme(axis.title = element_text(size = 16),
           strip.text = element_text(size = 14, face = "bold"),
           panel.grid = element_blank()) +
     guides(fill = guide_legend(label.theme = element_text(size = 12),
-                               title.theme = element_text(size = 14))) +
-    coord_sf(xlim = c(min(dat.states2$x - 50), max(dat.states2$x + 50)),
-             ylim = c(min(dat.states2$y - 50), max(dat.states2$y + 50)))
+                               title.theme = element_text(size = 14))) #+
+    # coord_sf(xlim = c(min(dat.states2$x - 50), max(dat.states2$x + 50)),
+    #          ylim = c(min(dat.states2$y - 50), max(dat.states2$y + 50)))
 )
 
 # Using estimates w/ threshold on posterior
 plotly::ggplotly(
   ggplot() +
-    geom_sf(data = brazil) +
+    # geom_sf(data = brazil) +
     geom_path(data = dat.states2, aes(x, y, group = id), color="grey60", size=0.25) +
     geom_point(data = dat.states2, aes(x, y, fill=z.post.thresh), size=1.5, pch=21, alpha=0.7) +
     geom_point(data = dat.states2 %>%
@@ -326,23 +324,23 @@ plotly::ggplotly(
                  slice(which(row_number() == n())) %>%
                  ungroup(), aes(x, y), color = "red", pch = 24, size = 3, stroke = 1.25) +
     scale_fill_manual("Behavior",
-                      values = c(viridis::viridis(4), "grey50")) +
+                      values = c(viridis::viridis(2), "grey50")) +
     labs(x = "Easting", y = "Northing", title = "Threshold on posterior") +
     theme_bw() +
     theme(axis.title = element_text(size = 16),
           strip.text = element_text(size = 14, face = "bold"),
           panel.grid = element_blank()) +
     guides(fill = guide_legend(label.theme = element_text(size = 12),
-                               title.theme = element_text(size = 14))) +
-    coord_sf(xlim = c(min(dat.states2$x - 50), max(dat.states2$x + 50)),
-             ylim = c(min(dat.states2$y - 50), max(dat.states2$y + 50)))
+                               title.theme = element_text(size = 14))) #+
+    # coord_sf(xlim = c(min(dat.states2$x - 50), max(dat.states2$x + 50)),
+    #          ylim = c(min(dat.states2$y - 50), max(dat.states2$y + 50)))
 )
 
 
 # Using estimates w/ most common state from posterior
 plotly::ggplotly(
   ggplot() +
-    geom_sf(data = brazil) +
+    # geom_sf(data = brazil) +
     geom_path(data = dat.states2, aes(x, y, group = id), color="grey60", size=0.25) +
     geom_point(data = dat.states2, aes(x, y, fill=z.post.max), size=1.5, pch=21, alpha=0.7) +
     geom_point(data = dat.states2 %>%
@@ -354,16 +352,16 @@ plotly::ggplotly(
                  slice(which(row_number() == n())) %>%
                  ungroup(), aes(x, y), color = "red", pch = 24, size = 3, stroke = 1.25) +
     scale_fill_manual("Behavior",
-                      values = c(viridis::viridis(4), "grey50")) +
+                      values = c(viridis::viridis(3), "grey50")) +
     labs(x = "Easting", y = "Northing", title = "Most common state from posterior") +
     theme_bw() +
     theme(axis.title = element_text(size = 16),
           strip.text = element_text(size = 14, face = "bold"),
           panel.grid = element_blank()) +
     guides(fill = guide_legend(label.theme = element_text(size = 12),
-                               title.theme = element_text(size = 14))) +
-    coord_sf(xlim = c(min(dat.states2$x - 50), max(dat.states2$x + 50)),
-             ylim = c(min(dat.states2$y - 50), max(dat.states2$y + 50)))
+                               title.theme = element_text(size = 14))) #+
+    # coord_sf(xlim = c(min(dat.states2$x - 50), max(dat.states2$x + 50)),
+    #          ylim = c(min(dat.states2$y - 50), max(dat.states2$y + 50)))
 )
 
 
@@ -404,7 +402,7 @@ future::plan(multisession, workers = availableCores() - 2)  #run MCMC chains in 
 dat.res.seg1<- segment_behavior(data = dat.list.sub, ngibbs = ngibbs, nbins = nbins,
                            alpha = alpha)
 future::plan(future::sequential)  #return to single core
-# takes 27 sec to run
+# takes 6 sec to run
 
 
 
@@ -458,7 +456,7 @@ future::plan(multisession, workers = availableCores() - 2)  #run MCMC chains in 
 dat.res.seg2<- segment_behavior(data = dat.list.sub, ngibbs = ngibbs, nbins = nbins,
                                 alpha = alpha, breakpt = breaks)
 future::plan(future::sequential)  #return to single core
-# takes 26 sec to run
+# takes 6 sec to run
 
 
 
@@ -499,107 +497,8 @@ plot_breakpoints(data = dat.list, as_date = FALSE, var_names = c("SL","TA","Disp
 
 
 
-# Redefine bins for SL and Disp
-ggplot(dat2) +
-  geom_density(aes(step), fill = "cadetblue") +
-  theme_bw()
-
-ggplot(dat2) +
-  geom_density(aes(disp), fill = "goldenrod") +
-  scale_x_continuous(breaks = seq(0, 1000, by = 150)) +
-  theme_bw()
-
-
-# step length (must be positive, but no upper bound)
-step.bin.lims2 <- c(seq(from = 0, to = 5, length = 6), 10, max(dat2$step, na.rm = TRUE))  #7 bins
-
-# displacement (must be positive, but no upper bound)
-disp.bin.lims2 <- c(seq(from = 0, to = 600, by = 150), max(dat2$disp, na.rm = TRUE))  #7 bins
-
-step.bin.lims2
-disp.bin.lims2
-
-
-# Discretize data streams
-dat.disc2 <- discrete_move_var(dat2,
-                              lims = list(step.bin.lims2, angle.bin.lims, disp.bin.lims2),
-                              varIn = c("step","angle","disp"),
-                              varOut = c("SL","TA","Disp"))
-
-
-
-# Viz histograms of discretized data streams
-ggplot(dat.disc2) +
-  geom_bar(aes(SL), fill = "cadetblue") +
-  theme_bw()
-
-ggplot(dat.disc2) +
-  geom_bar(aes(Disp), fill = "goldenrod") +
-  theme_bw()
-
-
-# Convert data to list by ID
-dat.list2 <- dat.disc2 %>%
-  df_to_list(., "id")
-
-# Only retain id and discretized data streams
-dat.list.sub2<- map(dat.list2,
-                   subset,
-                   select = c(id, SL, TA, Disp))
-
-
-
-# Run the segmentation model (unsupervised)
-set.seed(123)
-
-alpha<- 1  # hyperparameter for prior (Dirichlet) distribution
-ngibbs<- 50000  # number of iterations for Gibbs sampler
-nbins<- c(7,8,5)  # define number of bins per data stream (in order from dat.list.sub)
-
-progressr::handlers(progressr::handler_progress(clear = FALSE))  #to initialize progress bar
-future::plan(multisession, workers = availableCores() - 2)  #run MCMC chains in parallel
-
-dat.res.seg3<- segment_behavior(data = dat.list.sub2, ngibbs = ngibbs, nbins = nbins,
-                                alpha = alpha)
-future::plan(future::sequential)  #return to single core
-# takes 30 sec to run
-
-
-
-# Trace-plots for the log marginal likelihood (LML) per ID
-traceplot(data = dat.res.seg3, type = "LML")  #appears to have converged for each track
-
-# Trace-plots for the number of breakpoints per ID
-traceplot(data = dat.res.seg3, type = "nbrks")
-
-
-# Determine MAP for selecting breakpoints
-MAP.est3<- get_MAP(dat = dat.res.seg3$LML, nburn = ngibbs/2)
-brkpts3<- get_breakpts(dat = dat.res.seg3$brkpts, MAP.est = MAP.est3)
-
-# How many breakpoints estimated per ID?
-apply(brkpts1[,-1], 1, function(x) length(purrr::discard(x, is.na)))
-apply(brkpts3[,-1], 1, function(x) length(purrr::discard(x, is.na)))
-
-brkpts1
-brkpts3
-#looks like segmentation results have changed a little
-
-
-# Viz breakpoints w/ respect to data streams
-plot_breakpoints(data = dat.list2, as_date = TRUE, var_names = c("step","angle","disp"),
-                 var_labels = c("Step Length (km)", "Turning Angle (rad)", "Displacement (km)"),
-                 brkpts = brkpts3)
-#overall seems to do better job now
-
-plot_breakpoints(data = dat.list2, as_date = FALSE, var_names = c("SL","TA","Disp"),
-                 var_labels = c("Step Length", "Turning Angle", "Displacement"),
-                 brkpts = brkpts3)
-
-
-
 # Assign track segments to each ID
-dat.seg<- assign_tseg(dat = dat.list2, brkpts = brkpts3)
+dat.seg<- assign_tseg(dat = dat.list, brkpts = brkpts1)
 
 head(dat.seg)
 
@@ -616,7 +515,7 @@ head(dat.seg)
 dat.seg2<- dat.seg[,c("id","tseg","SL","TA","Disp")]
 
 #Summarize observations by track segment
-nbins<- c(7,8,5)
+nbins<- c(6,8,4)
 obs<- summarize_tsegs(dat = dat.seg2, nbins = nbins)
 obs
 
@@ -637,7 +536,7 @@ alpha<- 0.1
 dat.res.segclust<- cluster_segments(dat = obs, gamma1 = gamma1, alpha = alpha,
                                     ngibbs = ngibbs, nmaxclust = nmaxclust,
                                     nburn = nburn, ndata.types = ndata.types)
-# takes 19 sec to run
+# takes 4 sec to run
 
 
 # Check traceplot of log likelihood
@@ -670,7 +569,7 @@ ggplot(theta.estim_df, aes(behavior, prop)) +
 (theta.means<- round(colMeans(theta.estim), digits = 3))
 
 #Calculate cumulative sum
-cumsum(theta.means)  #probably 4 states
+cumsum(theta.means)  #probably 3 states
 
 
 
@@ -680,17 +579,17 @@ behav.res.seg<- get_behav_hist(dat = dat.res.segclust, nburn = nburn, ngibbs = n
                                var.names = c("Step Length","Turning Angle","Displacement"))
 
 # Add bin lim range to each label
-step.lims <- data.frame(bin.vals = cut(dat2$step, step.bin.lims2) %>%
+step.lims <- data.frame(bin.vals = cut(dat2$step, step.bin.lims) %>%
                           levels(),
-                        bin = 1:(length(step.bin.lims2) - 1),
+                        bin = 1:(length(step.bin.lims) - 1),
                         var = "Step Length")
 angle.lims <- data.frame(bin.vals = cut(dat2$angle, round(angle.bin.lims, 2)) %>%
                            levels(),
                          bin = 1:(length(angle.bin.lims) - 1),
                          var = "Turning Angle")
-disp.lims <- data.frame(bin.vals = cut(dat2$disp, round(disp.bin.lims2, 2)) %>%
+disp.lims <- data.frame(bin.vals = cut(dat2$disp, round(disp.bin.lims, 2)) %>%
                           levels(),
-                        bin = 1:(length(disp.bin.lims2) - 1),
+                        bin = 1:(length(disp.bin.lims) - 1),
                         var = "Displacement")
 lims <- rbind(step.lims, angle.lims, disp.lims)
 
@@ -707,7 +606,7 @@ ggplot(behav.res.seg, aes(x = bin.vals, y = prop, fill = as.factor(behav))) +
         axis.text.x.bottom = element_text(size = 12, angle = 45, vjust = 1, hjust=1),
         strip.text = element_text(size = 14),
         strip.text.x = element_text(face = "bold")) +
-  scale_fill_manual(values = c(viridis::viridis(5), rep("grey35", 2)), guide = 'none') +
+  scale_fill_manual(values = c(viridis::viridis(3), rep("grey35", 4)), guide = 'none') +
   scale_y_continuous(breaks = c(0.00, 0.50, 1.00)) +
   facet_grid(behav ~ var, scales = "free_x")
 
@@ -715,14 +614,13 @@ ggplot(behav.res.seg, aes(x = bin.vals, y = prop, fill = as.factor(behav))) +
 
 
 #Reformat proportion estimates for all track segments
-theta.estim.long<- expand_behavior(dat = dat.seg, theta.estim = theta.estim, obs = obs, nbehav = 5,
-                                   behav.names = c("Breeding_Encamped", "Migratory", "Foraging1",
-                                                   "Foraging2", "Breeding_ARS"),
-                                   behav.order = c(1,5,3:4,2))
+theta.estim.long<- expand_behavior(dat = dat.seg, theta.estim = theta.estim, obs = obs, nbehav = 3,
+                                   behav.names = c("Breeding", "Foraging", "Migratory"),
+                                   behav.order = c(1:3))
 
 #Plot results
 ggplot(theta.estim.long) +
-  geom_area(aes(x=date, y=prop, fill = behavior), color = "black", size = 0.25,
+  geom_area(aes(x=date, y=prop, fill = behavior), color = "black", linewidth = 0.25,
             position = "fill") +
   labs(x = "\nTime", y = "Proportion of Behavior\n") +
   scale_fill_viridis_d("Behavior") +
@@ -745,8 +643,7 @@ dat.seg.list<- df_to_list(dat = dat.seg, ind = "id")
 # Merge results with original data
 dat.out<- assign_behavior(dat.orig = dat.seg,
                           dat.seg.list = dat.seg.list,
-                          theta.estim.long = theta.estim.long,
-                          behav.names = levels(theta.estim.long$behavior))
+                          theta.estim.long = theta.estim.long)
 
 # Map dominant behavior for all IDs
 ggplot() +
@@ -792,28 +689,6 @@ ggplot() +
         legend.text = element_text(size = 12),
         legend.title = element_text(size = 14))
 
-dat.out2 <- dat.out %>%
-  mutate(Foraging = Foraging1 + Foraging2)
-
-
-ggplot() +
-  geom_path(data = dat.out2, aes(x, y, color = Foraging, group = id), size=0.5, alpha=0.7) +
-  geom_point(data = dat.out2 %>%
-               group_by(id) %>%
-               slice(which(row_number() == 1)) %>%
-               ungroup(), aes(x, y), color = "green", pch = 21, size = 3, stroke = 1.25) +
-  geom_point(data = dat.out2 %>%
-               group_by(id) %>%
-               slice(which(row_number() == n())) %>%
-               ungroup(), aes(x, y), color = "red", pch = 24, size = 3, stroke = 1.25) +
-  scale_color_viridis_c("Proportion\nForaging", option = "inferno", end = 0.90) +
-  labs(x = "Easting", y = "Northing", title = "Foraging") +
-  theme_bw() +
-  theme(axis.title = element_text(size = 16),
-        strip.text = element_text(size = 14, face = "bold"),
-        panel.grid = element_blank(),
-        legend.text = element_text(size = 12),
-        legend.title = element_text(size = 14))
 
 
 
@@ -821,5 +696,5 @@ ggplot() +
 
 #### Export datasets for easy loading ####
 
-save(behav.res.seg, theta.estim.long, dat.out2, dat.res.seg3, dat.res.segclust,
+save(behav.res.seg, theta.estim.long, dat.out, dat.res.seg2, dat.res.segclust,
      file = "Processed_data/bayesmove_model_fits.RData")

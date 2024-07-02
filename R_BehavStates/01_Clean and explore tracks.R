@@ -13,7 +13,7 @@ library(sf)
 
 #### Load data ####
 
-dat <- read.csv("Raw_data/FDN Cmydas tracks_subset.csv")
+dat <- read.csv("Raw_data/FDN Cmydas tracks_subset2.csv")
 
 # Explore data summaries
 glimpse(dat)
@@ -68,7 +68,7 @@ dat2$Date[1:10]  #inspect modified format
 dat2$Ptt <- as.character(dat2$Ptt)
 
 ggplot(dat2, aes(Longitude, Latitude, color = Ptt)) +
-  geom_path(aes(group = Ptt), size = 0.25) +
+  geom_path(aes(group = Ptt), linewidth = 0.25) +
   scale_color_viridis_d() +
   theme_bw()
 #there seems to be some testing points remaining from Wildlife Computers HQ in Seattle
@@ -80,7 +80,7 @@ world <- rnaturalearth::ne_countries(scale = 50, continent = c("North America","
 
 ggplot() +
   geom_sf(data = world) +
-  geom_path(data = dat2, aes(Longitude, Latitude, group = Ptt, color = Ptt), size = 0.25) +
+  geom_path(data = dat2, aes(Longitude, Latitude, group = Ptt, color = Ptt), linewidth = 0.25) +
   scale_color_viridis_d() +
   theme_bw() +
   coord_sf(xlim = c(min(dat2$Longitude) - 1, max(dat2$Longitude) + 1),
@@ -91,7 +91,7 @@ ggplot() +
 plotly::ggplotly(
   ggplot() +
     geom_sf(data = world) +
-    geom_path(data = dat2, aes(Longitude, Latitude, group = Ptt, color = Ptt), size = 0.25) +
+    geom_path(data = dat2, aes(Longitude, Latitude, group = Ptt, color = Ptt), linewidth = 0.25) +
     scale_color_viridis_d() +
     theme_bw() +
     coord_sf(xlim = c(min(dat2$Longitude) - 1, max(dat2$Longitude) + 1),
@@ -111,11 +111,11 @@ dat2 %>%
 #### Remove locations likely before tag deployment ####
 
 # Filter by study extent
-dat3<- dat2 %>%
-  filter(Latitude < -3 & Longitude > -40)
+dat3 <- dat2 %>%
+  filter(Latitude < 1)
 
 ggplot() +
-  geom_path(data = dat3, aes(Longitude, Latitude, group = Ptt, color = Ptt), size = 0.25) +
+  geom_path(data = dat3, aes(Longitude, Latitude, group = Ptt, color = Ptt), linewidth = 0.25) +
   scale_color_viridis_d() +
   theme_bw()
 # looks better; unfiltered spikes will be removed later

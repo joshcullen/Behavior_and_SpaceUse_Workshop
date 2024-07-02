@@ -12,8 +12,8 @@
 
 library(tidyverse)
 library(lubridate)
-library(momentuHMM)  #v1.5.4
-library(sf)  #v1.0.7
+library(momentuHMM)
+library(sf)
 library(tictoc)
 library(plotly)
 library(rerddapXtracto)
@@ -81,7 +81,7 @@ tic()
 sst <- rxtracto(sstInfo, parameter = 'analysed_sst',
                 xcoord = xpos, ycoord = ypos, tcoord = tpos,
                 xlen = 0.2, ylen = 0.2, progress_bar = TRUE)
-toc()  #takes 11 min to run
+toc()  #takes 23 min to run
 
 plotTrack(sst, xpos, ypos, tpos, plotColor = 'thermal')
 
@@ -122,7 +122,7 @@ fit_hmm_2states <- fitHMM(data = dat2,
                           estAngleMean = list(angle=TRUE),
                           stateNames = c('Encamped', 'Migratory'),
                           retryFits = 10)  #may be necessary to run more fits
-toc()  #took 30 sec to run
+toc()  #took 7 sec to run
 
 fit_hmm_2states
 plot(fit_hmm_2states)
@@ -167,7 +167,7 @@ fit_hmm_3states <- fitHMM(data = dat2,
                           estAngleMean = list(angle=TRUE),
                           stateNames = c('Breeding', 'Foraging', 'Migratory'),
                           retryFits = 10)
-toc()  #took 2 min to run
+toc()  #took 24 sec to run
 
 fit_hmm_3states
 
@@ -201,7 +201,7 @@ fit_hmm_2states_covar1 <- fitHMM(data = dat2,
                                 estAngleMean = list(angle=TRUE),
                                 stateNames = c('Encamped', 'Migratory'),
                                 retryFits = 10)
-toc()  #took 50 sec to run
+toc()  #took 8 sec to run
 
 fit_hmm_2states_covar1
 plot(fit_hmm_2states_covar1, plotCI = TRUE, plotStationary = TRUE)  #no noticeable impact of including SST, although slight effect of yday; stationary states show some patterns
@@ -241,7 +241,7 @@ fit_hmm_2states_covar2 <- fitHMM(data = dat2,
                                  estAngleMean = list(angle=TRUE),
                                  stateNames = c('Encamped', 'Migratory'),
                                  retryFits = 10)
-toc()  #took 2 min to run
+toc()  #took 25 sec to run
 
 fit_hmm_2states_covar2
 plot(fit_hmm_2states_covar2, plotCI = TRUE, plotStationary = TRUE)  #affects of covariates are greater on SL and TA vs TPM; stationary states show some patterns; appears to perform worse
@@ -278,7 +278,7 @@ fit_hmm_3states_covar1 <- fitHMM(data = dat2,
                                  estAngleMean = list(angle=TRUE),
                                  stateNames = c('Breeding', 'Foraging', 'Migratory'),
                                  retryFits = 10)
-toc()  #took 2 min to run
+toc()  #took 26 sec to run
 
 fit_hmm_3states_covar1
 plot(fit_hmm_3states_covar1, plotCI = TRUE, plotStationary = TRUE)  #seems to also perform worse
@@ -393,7 +393,7 @@ fit_hmm_3states_3vars <- fitHMM(data = dat3,
                                   estAngleMean = list(angle=TRUE),
                                   stateNames = c('Breeding','Foraging','Migratory'),
                                   retryFits = 10)
-toc()  #took 3.5 min to run
+toc()  #took 47 sec to run
 
 fit_hmm_3states_3vars
 
@@ -427,7 +427,7 @@ fit_hmm_3states_3vars2 <- fitHMM(data = dat3,
                                  estAngleMean = list(angle=TRUE),
                                  stateNames = c('Breeding','Foraging','Migratory'),
                                  retryFits = 10)
-toc()  #took 8 min to run
+toc()  #took 1.5 min to run
 
 fit_hmm_3states_3vars2
 plot(fit_hmm_3states_3vars2, plotCI = TRUE, plotStationary = TRUE)  #affects of covariates are greater on SL and TA vs TPM; stationary states show some patterns
