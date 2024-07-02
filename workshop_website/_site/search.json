@@ -11,7 +11,11 @@
     "href": "workshop-materials.html",
     "title": "Materials",
     "section": "",
-    "text": "This page contains an outline of the topics, content, and assignments for the workshop. Video recordings will be added after the workshop has ended.\n\n\n\n\n\n\n\n\n\n\n\nDate\nTopic\nSlides\nCode\nVideo Recording\n\n\n\n\nThurs, Sep 8\nIntro to behavioral state estimation\n\n\n\n\n\n\nClean and explore tracks\n\n\n\n\n\n\nFit SSM via aniMotum\n\n\nLecture, Live-coding\n\n\n\nFit HMM via momentuHMM\n\n\nLecture, Live-coding\n\n\n\nFit NP Bayesian models via bayesmove\n\n\nLecture, Live-coding\n\n\n\nCompare behavioral state estimates\n\n\n\n\n\n\nRecommended guidelines for selecting a method\n\n\n\n\n\nFri, Sep 9\nIntro to space-use estimation\n\n\n\n\n\n\nEstimate space-use with MCP via amt\n\n\n\n\n\n\nEstimate space-use with KDE via amt\n\n\nLecture, Live-coding\n\n\n\nEstimate space-use with dBBMM via move\n\n\nLecture, Live-coding\n\n\n\nCompare space-use estimates\n\n\n\n\n\n\nRecommended guidelines for selecting a method"
+    "text": "This page contains an outline of the topics, content, and assignments for the workshop. Video recordings will be added after the workshop has ended. Example dataset can be downloaded here.\n\n\n\n\n\n\n\n\n\n\n\nDate\nTopic\nSlides\nCode\nVideo Recording\n\n\n\n\nThurs, Sep 8\nIntro to behavioral state estimation\n\n\n\n\n\n\nClean and explore tracks\n\n\n\n\n\n\nFit SSM via aniMotum\n\n\nLecture, Live-coding\n\n\n\nFit HMM via momentuHMM\n\n\nLecture, Live-coding\n\n\n\nFit NP Bayesian models via bayesmove\n\n\nLecture, Live-coding\n\n\n\nCompare behavioral state estimates\n\n\n\n\n\n\nRecommended guidelines for selecting a method\n\n\n\n\n\nFri, Sep 9\nIntro to space-use estimation\n\n\n\n\n\n\nEstimate space-use with MCP via amt\n\n\n\n\n\n\nEstimate space-use with KDE via amt\n\n\nLecture, Live-coding\n\n\n\nEstimate space-use with dBBMM via move\n\n\nLecture, Live-coding\n\n\n\nCompare space-use estimates\n\n\n\n\n\n\nRecommended guidelines for selecting a method",
+    "crumbs": [
+      "Workshop information",
+      "Materials"
+    ]
   },
   {
     "objectID": "workshop-resources.html",
